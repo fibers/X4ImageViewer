@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3759A3191AF927A70099715E /* X4ImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3759A3171AF927A70099715E /* X4ImageViewer.m */; };
 		37F419AA1AF9210E0055AE74 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F419A91AF9210E0055AE74 /* main.m */; };
 		37F419AD1AF9210E0055AE74 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F419AC1AF9210E0055AE74 /* AppDelegate.m */; };
 		37F419B01AF9210E0055AE74 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F419AF1AF9210E0055AE74 /* ViewController.m */; };
 		37F419B31AF9210E0055AE74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37F419B11AF9210E0055AE74 /* Main.storyboard */; };
 		37F419B51AF9210E0055AE74 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F419B41AF9210E0055AE74 /* Images.xcassets */; };
 		37F419C41AF9210F0055AE74 /* X4ImageViewerDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F419C31AF9210F0055AE74 /* X4ImageViewerDemoTests.m */; };
-		37F419D01AF922540055AE74 /* X4ImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F419CE1AF922540055AE74 /* X4ImageViewer.m */; };
 		37F419D61AF922630055AE74 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 37F419D11AF922630055AE74 /* 1.jpg */; };
 		37F419D71AF922630055AE74 /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 37F419D21AF922630055AE74 /* 2.jpg */; };
 		37F419D81AF922630055AE74 /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 37F419D31AF922630055AE74 /* 3.jpg */; };
@@ -33,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3759A3171AF927A70099715E /* X4ImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = X4ImageViewer.m; path = X4ImageViewer/X4ImageViewer.m; sourceTree = SOURCE_ROOT; };
+		3759A3181AF927A70099715E /* X4ImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = X4ImageViewer.h; path = X4ImageViewer/X4ImageViewer.h; sourceTree = SOURCE_ROOT; };
 		37F419A41AF9210E0055AE74 /* X4ImageViewerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = X4ImageViewerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F419A81AF9210E0055AE74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37F419A91AF9210E0055AE74 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -45,8 +47,6 @@
 		37F419BD1AF9210F0055AE74 /* X4ImageViewerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = X4ImageViewerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F419C21AF9210F0055AE74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37F419C31AF9210F0055AE74 /* X4ImageViewerDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = X4ImageViewerDemoTests.m; sourceTree = "<group>"; };
-		37F419CE1AF922540055AE74 /* X4ImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = X4ImageViewer.m; sourceTree = "<group>"; };
-		37F419CF1AF922540055AE74 /* X4ImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X4ImageViewer.h; sourceTree = "<group>"; };
 		37F419D11AF922630055AE74 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		37F419D21AF922630055AE74 /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
 		37F419D31AF922630055AE74 /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
@@ -99,7 +99,8 @@
 		37F419A61AF9210E0055AE74 /* X4ImageViewerDemo */ = {
 			isa = PBXGroup;
 			children = (
-				37F419CD1AF9222F0055AE74 /* X4ImageViewer */,
+				3759A3171AF927A70099715E /* X4ImageViewer.m */,
+				3759A3181AF927A70099715E /* X4ImageViewer.h */,
 				37F419AB1AF9210E0055AE74 /* AppDelegate.h */,
 				37F419AC1AF9210E0055AE74 /* AppDelegate.m */,
 				37F419AE1AF9210E0055AE74 /* ViewController.h */,
@@ -140,15 +141,6 @@
 				37F419C21AF9210F0055AE74 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		37F419CD1AF9222F0055AE74 /* X4ImageViewer */ = {
-			isa = PBXGroup;
-			children = (
-				37F419CE1AF922540055AE74 /* X4ImageViewer.m */,
-				37F419CF1AF922540055AE74 /* X4ImageViewer.h */,
-			);
-			name = X4ImageViewer;
 			sourceTree = "<group>";
 		};
 		5D26E8118DCB9991A7CE0779 /* Pods */ = {
@@ -310,7 +302,7 @@
 				37F419B01AF9210E0055AE74 /* ViewController.m in Sources */,
 				37F419AD1AF9210E0055AE74 /* AppDelegate.m in Sources */,
 				37F419AA1AF9210E0055AE74 /* main.m in Sources */,
-				37F419D01AF922540055AE74 /* X4ImageViewer.m in Sources */,
+				3759A3191AF927A70099715E /* X4ImageViewer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
