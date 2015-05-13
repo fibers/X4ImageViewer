@@ -1,2 +1,2 @@
 # X4ImageViewer
-The ios easy used image viewer
+The ios easy-to-use image viewer
