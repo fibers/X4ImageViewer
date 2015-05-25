@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "X4ImageViewer.h"
+
 
 @interface ViewController ()
 
@@ -37,9 +37,10 @@
     
     self.view.backgroundColor = [UIColor greenColor];
     
-    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(50,50,200,400) images:imageArray];
-    iv.defaultImage = [UIImage imageNamed:@"1.png"];
-    iv.rectZoomIn = CGRectMake(0, 0, 320, 320);
+    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(10,10,300,300) images:imageArray imagePosition:CGRectMake(20,20,150,150) withPlaceholder:nil];
+    iv.currentImageIndex = 2;
+    iv.delegate = self;
+    iv.paginationType = PaginationTypeNumber;
     [iv loadImages];
     
     [self.view addSubview:iv];
@@ -48,6 +49,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (CGRect)rectForPagination{
+    return CGRectMake( 0, 0 , 100, 40);
 }
 
 @end

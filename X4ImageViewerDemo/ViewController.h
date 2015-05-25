@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "X4ImageViewer.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<X4ImageViewerDelegate>
 
 
 @end
