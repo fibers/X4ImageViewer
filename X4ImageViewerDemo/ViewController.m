@@ -53,7 +53,7 @@
 
 
 - (CGRect)rectForPagination{
-    return CGRectMake( 0, 0 , 100, 40);
+    return CGRectMake( 100, 50 , 40, 40);
 }
 
 @end

@@ -20,9 +20,6 @@
 @property (nonatomic, strong) UIPageControl *pageControlPagination;
 @property (nonatomic, strong) UIScrollView *scrollView;
 
-//
-//@property (nonatomic, strong) UITapGestureRecognizer *tapImageZoomIn;
-//@property (nonatomic, strong) UITapGestureRecognizer *tapImageZoomOut;
 
 @property (nonatomic, assign) BOOL bDragging;
 
@@ -75,7 +72,7 @@
         [self addSubview:self.scrollView];
         
         CGFloat wPaginationContainer = frame.size.width;
-        CGFloat hPaginationContainer = 40;
+        CGFloat hPaginationContainer = frame.size.height - imagePosition.origin.y - imagePosition.size.height;
         CGFloat xPaginationContainer = 0;
         CGFloat yPaginationContainer = frame.size.height - hPaginationContainer;
         CGRect rectPaginationContainer = CGRectMake(xPaginationContainer, yPaginationContainer, wPaginationContainer, hPaginationContainer);
@@ -151,30 +148,7 @@
     if(self.delegate && [self.delegate respondsToSelector:@selector(rectForPagination)]){
         self.pageControlPagination.frame = self.numberPagination.frame = [self.delegate rectForPagination];
     }
-//    [self removeAllImages];
-//    self.scrollView.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-//    self.scrollView.contentSize = CGSizeMake(self.bounds.size.width * self.imagesCount, self.bounds.size.height);
-//    self.scrollView.contentOffset = CGPointMake(self.bounds.size.width * self.currentImageIndex, 0);
-//    self.pageControl.frame = CGRectMake(0, self.bounds.size.height - self.pageControl.frame.size.height, self.bounds.size.width, self.pageControl.frame.size.height);
-//    [self loadImages];
-    
 }
-
-//- (void)tapImageZoomIn:(UITapGestureRecognizer *)gesture{
-//    
-//    self.frame = self.rectZoomIn;
-//    [self.scrollView zoomToRect:self.rectZoomIn animated:YES];
-//    [self removeGestureRecognizer:self.tapImageZoomIn];
-//    [self addGestureRecognizer:self.tapImageZoomOut];
-//}
-//
-//- (void)tapImageZoomOut:(UITapGestureRecognizer *)gesture{
-//    
-//    self.frame = self.rectZoomOut;
-//    [self.scrollView zoomToRect:self.rectZoomOut animated:YES];
-//    [self removeGestureRecognizer:self.tapImageZoomOut];
-//    [self addGestureRecognizer:self.tapImageZoomIn];
-//}
 
 
 - (void)loadImageAtIndex:(NSInteger)index{
