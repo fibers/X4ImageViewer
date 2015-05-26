@@ -1,0 +1,453 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		378BED981B1441BD00010F90 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED971B1441BD00010F90 /* main.m */; };
+		378BED9B1B1441BD00010F90 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED9A1B1441BD00010F90 /* AppDelegate.m */; };
+		378BED9E1B1441BD00010F90 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED9D1B1441BD00010F90 /* ViewController.m */; };
+		378BEDA11B1441BD00010F90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 378BED9F1B1441BD00010F90 /* Main.storyboard */; };
+		378BEDA31B1441BD00010F90 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDA21B1441BD00010F90 /* Images.xcassets */; };
+		378BEDB21B1441BD00010F90 /* X4ImageViewerDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BEDB11B1441BD00010F90 /* X4ImageViewerDemoTests.m */; };
+		378BEDBE1B1441EB00010F90 /* X4ImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BEDBD1B1441EB00010F90 /* X4ImageViewer.m */; };
+		378BEDC41B1445EF00010F90 /* 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDBF1B1445EF00010F90 /* 5.jpg */; };
+		378BEDC51B1445EF00010F90 /* 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDC01B1445EF00010F90 /* 4.jpg */; };
+		378BEDC61B1445EF00010F90 /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDC11B1445EF00010F90 /* 3.jpg */; };
+		378BEDC71B1445EF00010F90 /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDC21B1445EF00010F90 /* 2.jpg */; };
+		378BEDC81B1445EF00010F90 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDC31B1445EF00010F90 /* 1.jpg */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		378BEDAC1B1441BD00010F90 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 378BED8A1B1441BD00010F90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 378BED911B1441BD00010F90;
+			remoteInfo = X4ImageViewerDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		378BED921B1441BD00010F90 /* X4ImageViewerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = X4ImageViewerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		378BED961B1441BD00010F90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		378BED971B1441BD00010F90 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		378BED991B1441BD00010F90 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		378BED9A1B1441BD00010F90 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		378BED9C1B1441BD00010F90 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		378BED9D1B1441BD00010F90 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		378BEDA01B1441BD00010F90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		378BEDA21B1441BD00010F90 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		378BEDAB1B1441BD00010F90 /* X4ImageViewerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = X4ImageViewerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		378BEDB01B1441BD00010F90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		378BEDB11B1441BD00010F90 /* X4ImageViewerDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = X4ImageViewerDemoTests.m; sourceTree = "<group>"; };
+		378BEDBC1B1441EB00010F90 /* X4ImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X4ImageViewer.h; sourceTree = "<group>"; };
+		378BEDBD1B1441EB00010F90 /* X4ImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = X4ImageViewer.m; sourceTree = "<group>"; };
+		378BEDBF1B1445EF00010F90 /* 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5.jpg; sourceTree = "<group>"; };
+		378BEDC01B1445EF00010F90 /* 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 4.jpg; sourceTree = "<group>"; };
+		378BEDC11B1445EF00010F90 /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
+		378BEDC21B1445EF00010F90 /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
+		378BEDC31B1445EF00010F90 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		378BED8F1B1441BD00010F90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		378BEDA81B1441BD00010F90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		378BED891B1441BD00010F90 = {
+			isa = PBXGroup;
+			children = (
+				378BED941B1441BD00010F90 /* X4ImageViewerDemo */,
+				378BEDAE1B1441BD00010F90 /* X4ImageViewerDemoTests */,
+				378BED931B1441BD00010F90 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		378BED931B1441BD00010F90 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				378BED921B1441BD00010F90 /* X4ImageViewerDemo.app */,
+				378BEDAB1B1441BD00010F90 /* X4ImageViewerDemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		378BED941B1441BD00010F90 /* X4ImageViewerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				378BEDBB1B1441EB00010F90 /* X4ImageViewer */,
+				378BED991B1441BD00010F90 /* AppDelegate.h */,
+				378BED9A1B1441BD00010F90 /* AppDelegate.m */,
+				378BED9C1B1441BD00010F90 /* ViewController.h */,
+				378BED9D1B1441BD00010F90 /* ViewController.m */,
+				378BED9F1B1441BD00010F90 /* Main.storyboard */,
+				378BEDA21B1441BD00010F90 /* Images.xcassets */,
+				378BED951B1441BD00010F90 /* Supporting Files */,
+			);
+			path = X4ImageViewerDemo;
+			sourceTree = "<group>";
+		};
+		378BED951B1441BD00010F90 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				378BEDBF1B1445EF00010F90 /* 5.jpg */,
+				378BEDC01B1445EF00010F90 /* 4.jpg */,
+				378BEDC11B1445EF00010F90 /* 3.jpg */,
+				378BEDC21B1445EF00010F90 /* 2.jpg */,
+				378BEDC31B1445EF00010F90 /* 1.jpg */,
+				378BED961B1441BD00010F90 /* Info.plist */,
+				378BED971B1441BD00010F90 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		378BEDAE1B1441BD00010F90 /* X4ImageViewerDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				378BEDB11B1441BD00010F90 /* X4ImageViewerDemoTests.m */,
+				378BEDAF1B1441BD00010F90 /* Supporting Files */,
+			);
+			path = X4ImageViewerDemoTests;
+			sourceTree = "<group>";
+		};
+		378BEDAF1B1441BD00010F90 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				378BEDB01B1441BD00010F90 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		378BEDBB1B1441EB00010F90 /* X4ImageViewer */ = {
+			isa = PBXGroup;
+			children = (
+				378BEDBC1B1441EB00010F90 /* X4ImageViewer.h */,
+				378BEDBD1B1441EB00010F90 /* X4ImageViewer.m */,
+			);
+			path = X4ImageViewer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		378BED911B1441BD00010F90 /* X4ImageViewerDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 378BEDB51B1441BD00010F90 /* Build configuration list for PBXNativeTarget "X4ImageViewerDemo" */;
+			buildPhases = (
+				378BED8E1B1441BD00010F90 /* Sources */,
+				378BED8F1B1441BD00010F90 /* Frameworks */,
+				378BED901B1441BD00010F90 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = X4ImageViewerDemo;
+			productName = X4ImageViewerDemo;
+			productReference = 378BED921B1441BD00010F90 /* X4ImageViewerDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		378BEDAA1B1441BD00010F90 /* X4ImageViewerDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 378BEDB81B1441BD00010F90 /* Build configuration list for PBXNativeTarget "X4ImageViewerDemoTests" */;
+			buildPhases = (
+				378BEDA71B1441BD00010F90 /* Sources */,
+				378BEDA81B1441BD00010F90 /* Frameworks */,
+				378BEDA91B1441BD00010F90 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				378BEDAD1B1441BD00010F90 /* PBXTargetDependency */,
+			);
+			name = X4ImageViewerDemoTests;
+			productName = X4ImageViewerDemoTests;
+			productReference = 378BEDAB1B1441BD00010F90 /* X4ImageViewerDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		378BED8A1B1441BD00010F90 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = Doit;
+				TargetAttributes = {
+					378BED911B1441BD00010F90 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					378BEDAA1B1441BD00010F90 = {
+						CreatedOnToolsVersion = 6.3.1;
+						TestTargetID = 378BED911B1441BD00010F90;
+					};
+				};
+			};
+			buildConfigurationList = 378BED8D1B1441BD00010F90 /* Build configuration list for PBXProject "X4ImageViewerDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 378BED891B1441BD00010F90;
+			productRefGroup = 378BED931B1441BD00010F90 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				378BED911B1441BD00010F90 /* X4ImageViewerDemo */,
+				378BEDAA1B1441BD00010F90 /* X4ImageViewerDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		378BED901B1441BD00010F90 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				378BEDC71B1445EF00010F90 /* 2.jpg in Resources */,
+				378BEDC61B1445EF00010F90 /* 3.jpg in Resources */,
+				378BEDC51B1445EF00010F90 /* 4.jpg in Resources */,
+				378BEDC41B1445EF00010F90 /* 5.jpg in Resources */,
+				378BEDA11B1441BD00010F90 /* Main.storyboard in Resources */,
+				378BEDA31B1441BD00010F90 /* Images.xcassets in Resources */,
+				378BEDC81B1445EF00010F90 /* 1.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		378BEDA91B1441BD00010F90 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		378BED8E1B1441BD00010F90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				378BED9E1B1441BD00010F90 /* ViewController.m in Sources */,
+				378BED9B1B1441BD00010F90 /* AppDelegate.m in Sources */,
+				378BED981B1441BD00010F90 /* main.m in Sources */,
+				378BEDBE1B1441EB00010F90 /* X4ImageViewer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		378BEDA71B1441BD00010F90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				378BEDB21B1441BD00010F90 /* X4ImageViewerDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		378BEDAD1B1441BD00010F90 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 378BED911B1441BD00010F90 /* X4ImageViewerDemo */;
+			targetProxy = 378BEDAC1B1441BD00010F90 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		378BED9F1B1441BD00010F90 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				378BEDA01B1441BD00010F90 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		378BEDB31B1441BD00010F90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		378BEDB41B1441BD00010F90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		378BEDB61B1441BD00010F90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = X4ImageViewerDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		378BEDB71B1441BD00010F90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = X4ImageViewerDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		378BEDB91B1441BD00010F90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = X4ImageViewerDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/X4ImageViewerDemo.app/X4ImageViewerDemo";
+			};
+			name = Debug;
+		};
+		378BEDBA1B1441BD00010F90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = X4ImageViewerDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/X4ImageViewerDemo.app/X4ImageViewerDemo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		378BED8D1B1441BD00010F90 /* Build configuration list for PBXProject "X4ImageViewerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				378BEDB31B1441BD00010F90 /* Debug */,
+				378BEDB41B1441BD00010F90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		378BEDB51B1441BD00010F90 /* Build configuration list for PBXNativeTarget "X4ImageViewerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				378BEDB61B1441BD00010F90 /* Debug */,
+				378BEDB71B1441BD00010F90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		378BEDB81B1441BD00010F90 /* Build configuration list for PBXNativeTarget "X4ImageViewerDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				378BEDB91B1441BD00010F90 /* Debug */,
+				378BEDBA1B1441BD00010F90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 378BED8A1B1441BD00010F90 /* Project object */;
+}
