@@ -49,6 +49,9 @@
         _scrollView.delegate = self;
         [self addSubview:_scrollView];
         
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapScrollView:)];
+        [_scrollView addGestureRecognizer:tapGesture];
+        
         CGFloat wPaginationContainer = frame.size.width;
         CGFloat hPaginationContainer = 40;
         CGFloat xPaginationContainer = 0;
@@ -65,6 +68,7 @@
         _pageControlPagination.hidesForSinglePage = YES;
         _pageControlPagination.defersCurrentPageDisplay = YES;
         _pageControlPagination.hidden = NO;
+        _pageControlPagination.userInteractionEnabled = NO;
         [_paginationContainer addSubview:_pageControlPagination];
         
         _numberPagination = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 42, 24)];
@@ -77,6 +81,7 @@
         _numberPagination.textAlignment = NSTextAlignmentCenter;
         _numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", _currentImageIndex + 1, [_images count]];
         _numberPagination.hidden = YES;
+        _numberPagination.userInteractionEnabled = NO;
         [_paginationContainer addSubview:_numberPagination];
         
         _imageViews = [[NSMutableArray alloc] init];
@@ -135,6 +140,7 @@
             ivImage.image = [self.images objectAtIndex:index];
             
             [self.scrollView addSubview:ivImage];
+            
         }
     }else{
         if(!ivImage.image){
@@ -148,6 +154,14 @@
             [self.scrollView addSubview:ivImage];
         }
     }
+    
+    
+//    CGFloat scaleWidth = (CGFloat)ivImage.image.size.width / ivImage.bounds.size.width;
+//    CGFloat scaleHeight = (CGFloat)ivImage.image.size.height / ivImage.bounds.size.height;
+//    CGFloat minScale = MIN(scaleWidth, scaleHeight);
+//    
+//    self.scrollView.minimumZoomScale = minScale;
+//    self.scrollView.zoomScale = minScale;
 }
 
 - (void)removeImageAtIndex:(NSInteger)index{
@@ -199,11 +213,15 @@
     
 }
 
-
+#pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
     _currentImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
     [self loadImages];
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    return [self.imageViews objectAtIndex:self.currentImageIndex];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
@@ -213,6 +231,12 @@
     }
     
     return view;
+}
+
+- (void)onTapScrollView:(UITapGestureRecognizer *)gesture{
+    if(self.delegate && [self.delegate respondsToSelector:@selector(didTappedImageWithIndex:)]){
+        [self.delegate didTappedImageWithIndex:self.currentImageIndex];
+    }
 }
 
 

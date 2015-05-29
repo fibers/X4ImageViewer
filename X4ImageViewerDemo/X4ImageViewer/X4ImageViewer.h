@@ -16,6 +16,9 @@ typedef NS_ENUM(NSInteger, PaginationType){
 
 @protocol X4ImageViewerDelegate <NSObject>
 
+@optional
+- (void)didTappedImageWithIndex:(NSInteger)index;
+
 @end
 
 @interface X4ImageViewer : UIView <UIScrollViewDelegate>
