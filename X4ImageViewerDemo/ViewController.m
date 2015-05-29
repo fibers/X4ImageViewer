@@ -29,11 +29,11 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(10,10,300,300) images:imageArray imagePosition:CGRectMake(20,20,150,150) withPlaceholder:nil];
+    
+    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(20,20,200,200) images:imageArray];
     iv.currentImageIndex = 2;
     iv.delegate = self;
     iv.paginationType = PaginationTypeNumber;
-    [iv loadImages];
     
     [self.view addSubview:iv];
 }
@@ -43,9 +43,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-- (CGRect)rectForPagination{
-    return CGRectMake( 100, 50 , 40, 40);
-}
 
 @end

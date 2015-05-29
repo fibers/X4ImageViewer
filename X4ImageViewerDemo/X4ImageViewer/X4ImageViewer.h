@@ -16,8 +16,6 @@ typedef NS_ENUM(NSInteger, PaginationType){
 
 @protocol X4ImageViewerDelegate <NSObject>
 
-- (CGRect)rectForPagination;
-
 @end
 
 @interface X4ImageViewer : UIView <UIScrollViewDelegate>
@@ -25,11 +23,12 @@ typedef NS_ENUM(NSInteger, PaginationType){
 @property (nonatomic, assign) NSInteger currentImageIndex;
 @property (nonatomic, assign) PaginationType paginationType;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
-@property (nonatomic, strong) UIImage *placeholderImage;
 
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images imagePosition:(CGRect)imagePosition withPlaceholder:(UIImage *)placeholderImage;
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images imagePosition:(CGRect)imagePosition;
+- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage;
 - (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images;
-- (void)loadImages;
+
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
+
 
 @end

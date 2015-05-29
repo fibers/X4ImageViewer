@@ -10,17 +10,13 @@
 
 @interface X4ImageViewer ()
 
-@property (nonatomic, assign) CGRect imagePosition;
-@property (nonatomic, assign) NSInteger imagesCount;
 @property (nonatomic, strong) NSArray *images;
-@property (nonatomic, strong) NSMutableArray *imageViewArray;
+@property (nonatomic, strong) NSMutableArray *imageViews;
 @property (nonatomic, strong) UILabel *numberPagination;
 @property (nonatomic, strong) UIPageControl *pageControlPagination;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *paginationContainer;
-
-
-@property (nonatomic, assign) BOOL bDragging;
+@property (nonatomic, strong) UIImage *placeholderImage;
 
 @end
 
@@ -28,80 +24,69 @@
 @implementation X4ImageViewer
 
 - (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images{
-    
-    CGRect imagePosition = CGRectMake(0, 0, frame.size.width, frame.size.height);
-    return [self initWithFrame:frame images:images imagePosition:imagePosition withPlaceholder:nil];
+    return [self initWithFrame:frame images:images withPlaceholder:nil];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images imagePosition:(CGRect)imagePosition{
-    return [self initWithFrame:frame images:images imagePosition:imagePosition withPlaceholder:nil];
-}
 
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images imagePosition:(CGRect)imagePosition withPlaceholder:(UIImage *)placeholderImage{
+- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage{
     self = [super initWithFrame:frame];
     if(self){
         
-        if(CGRectGetWidth(frame) < CGRectGetWidth(imagePosition)
-           || CGRectGetHeight(frame) < CGRectGetHeight(imagePosition)){
-            NSAssert(NO, @"[X4ImageViewer] The image rect must not be smaller than the image viewer");
-        }
-        
-        if([images count] == 0){
-            NSAssert(NO, @"[X4ImageViewer] You must initialize the view with a valid array which contains one image at least.");
-        }
-        
-        
         self.backgroundColor = [UIColor blackColor];
     
-        self.currentImageIndex = 0;
-        self.paginationType = PaginationTypePageControl;
-        self.placeholderImage = placeholderImage;
+        _currentImageIndex = 0;
+        _paginationType = PaginationTypePageControl;
+        _placeholderImage = placeholderImage;
         
-        self.images = images;
-        self.imagePosition = imagePosition;
-        self.imagesCount = [images count];
+        _images = images;
         
-        self.scrollView = [[UIScrollView alloc] initWithFrame:self.imagePosition];
-        self.scrollView.contentSize = CGSizeMake(self.imagePosition.size.width * self.imagesCount, self.imagePosition.size.height);
-        self.scrollView.pagingEnabled = YES;
-        self.scrollView.scrollEnabled = YES;
-        self.scrollView.bounces = NO;
-        self.scrollView.showsHorizontalScrollIndicator = self.scrollView.showsVerticalScrollIndicator = NO;
-        self.scrollView.delegate = self;
-        [self addSubview:self.scrollView];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        _scrollView.contentSize = CGSizeMake(_scrollView.bounds.size.width * [_images count], _scrollView.bounds.size.height);
+        _scrollView.pagingEnabled = YES;
+        _scrollView.scrollEnabled = YES;
+        _scrollView.bounces = NO;
+        _scrollView.showsHorizontalScrollIndicator = _scrollView.showsVerticalScrollIndicator = NO;
+        _scrollView.delegate = self;
+        [self addSubview:_scrollView];
         
         CGFloat wPaginationContainer = frame.size.width;
-        CGFloat hPaginationContainer = frame.size.height - imagePosition.origin.y - imagePosition.size.height;
+        CGFloat hPaginationContainer = 40;
         CGFloat xPaginationContainer = 0;
         CGFloat yPaginationContainer = frame.size.height - hPaginationContainer;
         CGRect rectPaginationContainer = CGRectMake(xPaginationContainer, yPaginationContainer, wPaginationContainer, hPaginationContainer);
-        self.paginationContainer = [[UIView alloc] initWithFrame:rectPaginationContainer];
-        [self addSubview:self.paginationContainer];
+        _paginationContainer = [[UIView alloc] initWithFrame:rectPaginationContainer];
+        _paginationContainer.backgroundColor = [UIColor clearColor];
+        [self addSubview:_paginationContainer];
         
-        CGRect rectPagination = CGRectMake(0, 0, wPaginationContainer, hPaginationContainer);
-        self.pageControlPagination = [[UIPageControl alloc] initWithFrame:rectPagination];
-        self.pageControlPagination.currentPage = self.currentImageIndex;
-        self.pageControlPagination.numberOfPages = self.imagesCount;
-        self.pageControlPagination.defersCurrentPageDisplay = YES;
-        self.pageControlPagination.hidden = NO;
-        [self.paginationContainer addSubview:self.pageControlPagination];
+        CGRect rectPageControlPagination = CGRectMake(0, 0, wPaginationContainer, hPaginationContainer);
+        _pageControlPagination = [[UIPageControl alloc] initWithFrame:rectPageControlPagination];
+        _pageControlPagination.currentPage = _currentImageIndex;
+        _pageControlPagination.numberOfPages = [_images count];
+        _pageControlPagination.hidesForSinglePage = YES;
+        _pageControlPagination.defersCurrentPageDisplay = YES;
+        _pageControlPagination.hidden = NO;
+        [_paginationContainer addSubview:_pageControlPagination];
         
-        self.numberPagination = [[UILabel alloc] initWithFrame:rectPagination];
-        self.numberPagination.font = [UIFont systemFontOfSize:15];
-        self.numberPagination.textColor = [UIColor whiteColor];
-        self.numberPagination.textAlignment = NSTextAlignmentCenter;
-        self.numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", self.currentImageIndex + 1, self.imagesCount];
-        self.numberPagination.hidden = YES;
-        [self.paginationContainer addSubview:self.numberPagination];
+        _numberPagination = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 42, 24)];
+        _numberPagination.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        _numberPagination.layer.borderWidth = 0;
+        _numberPagination.layer.masksToBounds = 1;
+        _numberPagination.layer.cornerRadius = 12;
+        _numberPagination.font = [UIFont systemFontOfSize:15];
+        _numberPagination.textColor = [UIColor whiteColor];
+        _numberPagination.textAlignment = NSTextAlignmentCenter;
+        _numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", _currentImageIndex + 1, [_images count]];
+        _numberPagination.hidden = YES;
+        [_paginationContainer addSubview:_numberPagination];
         
-        self.imageViewArray = [[NSMutableArray alloc] init];
-        for(int i=0; i<self.imagesCount; i++){
+        _imageViews = [[NSMutableArray alloc] init];
+        for(int i=0; i<[_images count]; i++){
             UIImageView *iv = [[UIImageView alloc] init];
-            if(self.placeholderImage){
-                iv.image = self.placeholderImage;
+            if(_placeholderImage){
+                iv.image = _placeholderImage;
             }
             iv.contentMode =  UIViewContentModeScaleAspectFit;
-            [self.imageViewArray addObject:iv];
+            [_imageViews addObject:iv];
         }
 
         return self;
@@ -110,47 +95,36 @@
 }
 
 
-- (void)setCurrentImageIndex:(NSInteger)currentImageIndex{
-    _currentImageIndex = currentImageIndex;
-    
-    _pageControlPagination.currentPage = _currentImageIndex;
-    _numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", _currentImageIndex + 1, _imagesCount];
-    
-    _scrollView.contentOffset = CGPointMake(_scrollView.bounds.size.width * _currentImageIndex, 0);
-}
-
 - (void)setPaginationType:(PaginationType)paginationType{
     
     _paginationType = paginationType;
     
-    if(_paginationType == PaginationTypeNumber){
-        _pageControlPagination.hidden = YES;
-        _numberPagination.hidden = NO;
-    }else if(_paginationType == PaginationTypePageControl){
-        _pageControlPagination.hidden = NO;
-        _numberPagination.hidden = YES;
+    if(self.paginationType == PaginationTypeNumber){
+        self.pageControlPagination.hidden = YES;
+        self.numberPagination.hidden = NO;
+    }else if(self.paginationType == PaginationTypePageControl){
+        self.pageControlPagination.hidden = NO;
+        self.numberPagination.hidden = YES;
     }else{
-        _pageControlPagination.hidden = NO;
-        _numberPagination.hidden = YES;
+        self.pageControlPagination.hidden = NO;
+        self.numberPagination.hidden = YES;
     }
 }
 
-
-- (void)layoutSubviews{
-    
-    if(self.delegate && [self.delegate respondsToSelector:@selector(rectForPagination)]){
-        self.pageControlPagination.frame = self.numberPagination.frame = [self.delegate rectForPagination];
-    }
+- (void)setCurrentImageIndex:(NSInteger)currentImageIndex{
+    _currentImageIndex = currentImageIndex;
+    self.scrollView.contentOffset = CGPointMake(self.scrollView.bounds.size.width * self.currentImageIndex, 0);
 }
+
 
 
 - (void)loadImageAtIndex:(NSInteger)index{
     
-    if(index < 0 || index >= self.imagesCount){
+    if(index < 0 || index >= [self.images count]){
         return;
     }
     
-    UIImageView *ivImage = (UIImageView *)[self.imageViewArray objectAtIndex:index];
+    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
     if(self.placeholderImage){
         if([ivImage.image isEqual:self.placeholderImage]){
             CGRect frameImage = self.scrollView.bounds;
@@ -178,11 +152,11 @@
 
 - (void)removeImageAtIndex:(NSInteger)index{
     
-    if(index < 0 || index >= self.imagesCount){
+    if(index < 0 || index >= [self.images count]){
         return;
     }
 
-    UIImageView *ivImage = (UIImageView *)[self.imageViewArray objectAtIndex:index];
+    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
     if(self.placeholderImage){
         if(![ivImage.image isEqual:self.placeholderImage]){
             [ivImage removeFromSuperview];
@@ -197,7 +171,7 @@
 }
 
 - (void)removeAllImages{
-    for(NSInteger i=0; i<self.imagesCount; i++){
+    for(NSInteger i=0; i<[self.images count]; i++){
         [self removeImageAtIndex:i];
     }
 }
@@ -206,7 +180,7 @@
 - (void)loadImages{
     
     self.pageControlPagination.currentPage = self.currentImageIndex;
-    self.numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", self.currentImageIndex + 1, self.imagesCount];
+    self.numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", self.currentImageIndex + 1, [self.images count]];
     
     NSInteger previousImageIndex = self.currentImageIndex - 1;
     NSInteger nextImageIndex = self.currentImageIndex + 1;
@@ -219,7 +193,7 @@
         [self loadImageAtIndex:i];
     }
     
-    for(NSInteger i=nextImageIndex+1; i<self.imagesCount; i++){
+    for(NSInteger i=nextImageIndex+1; i<[self.images count]; i++){
         [self removeImageAtIndex:i];
     }
     
@@ -227,20 +201,9 @@
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-    if(self.bDragging){
-        _currentImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
-        [self loadImages];
-    }
-}
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    self.bDragging = NO;
-}
-
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    self.bDragging = YES;
+    _currentImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
+    [self loadImages];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
