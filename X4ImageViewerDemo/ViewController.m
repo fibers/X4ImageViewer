@@ -30,8 +30,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
-    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(20,20,200,200) images:imageArray];
-    iv.currentImageIndex = 2;
+    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,20,320,460) images:imageArray];
+//    iv.currentImageIndex = 2;
     iv.delegate = self;
     iv.paginationType = PaginationTypeNumber;
     

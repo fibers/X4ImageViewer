@@ -12,23 +12,19 @@
 
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) NSMutableArray *imageViews;
+@property (nonatomic, strong) NSMutableArray *innerScrollViews;
 @property (nonatomic, strong) UILabel *numberPagination;
 @property (nonatomic, strong) UIPageControl *pageControlPagination;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *paginationContainer;
-@property (nonatomic, strong) UIImage *placeholderImage;
 
 @end
 
 
 @implementation X4ImageViewer
 
+
 - (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images{
-    return [self initWithFrame:frame images:images withPlaceholder:nil];
-}
-
-
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage{
     self = [super initWithFrame:frame];
     if(self){
         
@@ -36,26 +32,26 @@
     
         _currentImageIndex = 0;
         _paginationType = PaginationTypePageControl;
-        _placeholderImage = placeholderImage;
         
         _images = images;
         
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView.delegate = self;
         _scrollView.contentSize = CGSizeMake(_scrollView.bounds.size.width * [_images count], _scrollView.bounds.size.height);
         _scrollView.pagingEnabled = YES;
         _scrollView.scrollEnabled = YES;
         _scrollView.bounces = NO;
         _scrollView.showsHorizontalScrollIndicator = _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.delegate = self;
+        _scrollView.tag = -1;
         [self addSubview:_scrollView];
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapScrollView:)];
         [_scrollView addGestureRecognizer:tapGesture];
         
-        CGFloat wPaginationContainer = frame.size.width;
+        CGFloat wPaginationContainer = self.bounds.size.width;
         CGFloat hPaginationContainer = 40;
         CGFloat xPaginationContainer = 0;
-        CGFloat yPaginationContainer = frame.size.height - hPaginationContainer;
+        CGFloat yPaginationContainer = self.bounds.size.height - hPaginationContainer;
         CGRect rectPaginationContainer = CGRectMake(xPaginationContainer, yPaginationContainer, wPaginationContainer, hPaginationContainer);
         _paginationContainer = [[UIView alloc] initWithFrame:rectPaginationContainer];
         _paginationContainer.backgroundColor = [UIColor clearColor];
@@ -85,14 +81,38 @@
         [_paginationContainer addSubview:_numberPagination];
         
         _imageViews = [[NSMutableArray alloc] init];
-        for(int i=0; i<[_images count]; i++){
-            UIImageView *iv = [[UIImageView alloc] init];
-            if(_placeholderImage){
-                iv.image = _placeholderImage;
-            }
-            iv.contentMode =  UIViewContentModeScaleAspectFit;
+        _innerScrollViews = [[NSMutableArray alloc] init];
+        
+        for(NSUInteger i=0; i<[images count]; i++){
+            UIImage *image = [images objectAtIndex:i];
+            
+            CGRect rectInnerScrollView = _scrollView.bounds;
+            rectInnerScrollView.origin.x = i * _scrollView.bounds.size.width;
+            rectInnerScrollView.origin.y = 0;
+            
+            UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:rectInnerScrollView];
+            
+            UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,image.size.width,image.size.height)];
+            
+            [scrollView addSubview:iv];
             [_imageViews addObject:iv];
+            
+            scrollView.delegate = self;
+            scrollView.contentSize = image.size;
+            
+            CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / scrollView.contentSize.width;
+            CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / scrollView.contentSize.height;
+            CGFloat minScale = MIN(scaleWidth, scaleHeight);
+            
+            scrollView.minimumZoomScale = minScale;
+            scrollView.maximumZoomScale = 1;
+            scrollView.tag = i;
+            [_innerScrollViews addObject:scrollView];
+            
         }
+
+        
+        [self loadImages];
 
         return self;
     }
@@ -114,6 +134,7 @@
         self.pageControlPagination.hidden = NO;
         self.numberPagination.hidden = YES;
     }
+    
 }
 
 - (void)setCurrentImageIndex:(NSInteger)currentImageIndex{
@@ -129,39 +150,20 @@
         return;
     }
     
+    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
     UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
-    if(self.placeholderImage){
-        if([ivImage.image isEqual:self.placeholderImage]){
-            CGRect frameImage = self.scrollView.bounds;
-            frameImage.origin.x = frameImage.size.width * index;
-            frameImage.origin.y = 0;
-            
-            ivImage.frame = frameImage;
-            ivImage.image = [self.images objectAtIndex:index];
-            
-            [self.scrollView addSubview:ivImage];
-            
-        }
-    }else{
-        if(!ivImage.image){
-            CGRect frameImage = self.scrollView.bounds;
-            frameImage.origin.x = frameImage.size.width * index;
-            frameImage.origin.y = 0;
-            
-            ivImage.frame = frameImage;
-            ivImage.image = [self.images objectAtIndex:index];
-            
-            [self.scrollView addSubview:ivImage];
-        }
+    
+    if(!ivImage.image){
+
+        ivImage.contentMode = UIViewContentModeScaleAspectFit;
+        ivImage.image = (UIImage *)[self.images objectAtIndex:index];
+        [self.scrollView addSubview:scrollView];
+        
+        scrollView.zoomScale = scrollView.minimumZoomScale;
+        [self moveImageToCenter:index];
+
     }
     
-    
-//    CGFloat scaleWidth = (CGFloat)ivImage.image.size.width / ivImage.bounds.size.width;
-//    CGFloat scaleHeight = (CGFloat)ivImage.image.size.height / ivImage.bounds.size.height;
-//    CGFloat minScale = MIN(scaleWidth, scaleHeight);
-//    
-//    self.scrollView.minimumZoomScale = minScale;
-//    self.scrollView.zoomScale = minScale;
 }
 
 - (void)removeImageAtIndex:(NSInteger)index{
@@ -170,17 +172,12 @@
         return;
     }
 
+    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
     UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
-    if(self.placeholderImage){
-        if(![ivImage.image isEqual:self.placeholderImage]){
-            [ivImage removeFromSuperview];
-            ivImage.image = self.placeholderImage;
-        }
-    }else{
-        if(ivImage.image){
-            [ivImage removeFromSuperview];
-            ivImage.image = nil;
-        }
+    
+    if(ivImage.image){
+        [scrollView removeFromSuperview];
+        ivImage.image = nil;
     }
 }
 
@@ -216,13 +213,29 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
-    _currentImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
-    [self loadImages];
+    if(scrollView.tag == -1){
+        _currentImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
+        [self loadImages];
+    }
+}
+
+
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView{
+    if(scrollView.tag >= 0){
+        [self moveImageToCenter:scrollView.tag];
+    }
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return [self.imageViews objectAtIndex:self.currentImageIndex];
+    
+    if(scrollView.tag >= 0){
+        return [self.imageViews objectAtIndex:scrollView.tag];
+    }else{
+        return nil;
+    }
 }
+
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
     UIView *view = [super hitTest:point withEvent:event];
@@ -237,6 +250,29 @@
     if(self.delegate && [self.delegate respondsToSelector:@selector(didTappedImageWithIndex:)]){
         [self.delegate didTappedImageWithIndex:self.currentImageIndex];
     }
+}
+
+- (void)moveImageToCenter:(NSUInteger)index{
+    
+    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
+    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
+    
+    CGSize scrollViewSize = scrollView.bounds.size;
+    CGRect imageFrame = ivImage.frame;
+    
+    if(imageFrame.size.width < scrollViewSize.width){
+        imageFrame.origin.x = (scrollViewSize.width - imageFrame.size.width) / 2;
+    } else {
+        imageFrame.origin.x = 0;
+    }
+    
+    if(imageFrame.size.height < scrollViewSize.height){
+        imageFrame.origin.y = (scrollViewSize.height - imageFrame.size.height) / 2;
+    } else {
+        imageFrame.origin.y = 0;
+    }
+    
+    ivImage.frame = imageFrame;
 }
 
 

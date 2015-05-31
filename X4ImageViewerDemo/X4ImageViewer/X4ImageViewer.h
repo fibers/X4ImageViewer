@@ -27,7 +27,6 @@ typedef NS_ENUM(NSInteger, PaginationType){
 @property (nonatomic, assign) PaginationType paginationType;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
 
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage;
 - (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images;
 
 - (instancetype)init NS_UNAVAILABLE;
