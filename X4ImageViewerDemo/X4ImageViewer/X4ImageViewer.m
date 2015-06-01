@@ -93,6 +93,7 @@
             UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:rectInnerScrollView];
             
             UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,image.size.width,image.size.height)];
+            iv.contentMode = UIViewContentModeScaleAspectFit;
             
             [scrollView addSubview:iv];
             [_imageViews addObject:iv];
@@ -107,6 +108,7 @@
             scrollView.minimumZoomScale = minScale;
             scrollView.maximumZoomScale = 1;
             scrollView.tag = i;
+            
             [_innerScrollViews addObject:scrollView];
             
         }
@@ -137,7 +139,7 @@
     
 }
 
-- (void)setCurrentImageIndex:(NSInteger)currentImageIndex{
+- (void)setCurrentImageIndex:(NSUInteger)currentImageIndex{
     _currentImageIndex = currentImageIndex;
     self.scrollView.contentOffset = CGPointMake(self.scrollView.bounds.size.width * self.currentImageIndex, 0);
 }
@@ -155,13 +157,26 @@
     
     if(!ivImage.image){
 
-        ivImage.contentMode = UIViewContentModeScaleAspectFit;
         ivImage.image = (UIImage *)[self.images objectAtIndex:index];
         [self.scrollView addSubview:scrollView];
         
         scrollView.zoomScale = scrollView.minimumZoomScale;
         [self moveImageToCenter:index];
+    }
+}
 
+- (void)restoreImageAtIndex:(NSInteger)index{
+    
+    if(index < 0 || index >= [self.images count]){
+        return;
+    }
+
+    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
+    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
+    
+    if(ivImage.image){
+        scrollView.zoomScale = scrollView.minimumZoomScale;
+        [self moveImageToCenter:index];
     }
     
 }
@@ -207,8 +222,9 @@
     for(NSInteger i=nextImageIndex+1; i<[self.images count]; i++){
         [self removeImageAtIndex:i];
     }
-    
 }
+
+
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -217,6 +233,15 @@
         _currentImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
         [self loadImages];
     }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
+    NSInteger previousImageIndex = self.currentImageIndex - 1;
+    NSInteger nextImageIndex = self.currentImageIndex + 1;
+    
+    [self restoreImageAtIndex:previousImageIndex];
+    [self restoreImageAtIndex:nextImageIndex];
 }
 
 
@@ -235,6 +260,7 @@
         return nil;
     }
 }
+
 
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{

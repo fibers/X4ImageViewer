@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, PaginationType){
 
 @interface X4ImageViewer : UIView <UIScrollViewDelegate>
 
-@property (nonatomic, assign) NSInteger currentImageIndex;
+@property (nonatomic, assign) NSUInteger currentImageIndex;
 @property (nonatomic, assign) PaginationType paginationType;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
 
