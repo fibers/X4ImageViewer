@@ -265,8 +265,12 @@
 }
 
 - (void)onTapScrollView:(UITapGestureRecognizer *)gesture{
-    if(self.delegate && [self.delegate respondsToSelector:@selector(didTappedImageWithIndex:)]){
-        [self.delegate didTappedImageWithIndex:self.currentImageIndex];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(didTappedImageView:withIndex:inScrollView:)]){
+        
+        UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentImageIndex];
+        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentImageIndex];
+        
+        [self.delegate didTappedImageView:imageView withIndex:self.currentImageIndex inScrollView:scrollView];
     }
 }
 
