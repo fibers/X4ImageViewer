@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "X4ImageViewer.h"
 
-@interface ViewController : UIViewController<X4ImageViewerDelegate>
+@interface ViewController : UIViewController<X4ImageViewerDelegate, UIScrollViewDelegate>
 
 
 @end

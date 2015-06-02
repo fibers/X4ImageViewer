@@ -438,6 +438,7 @@
 				378BEDB71B1441BD00010F90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		378BEDB81B1441BD00010F90 /* Build configuration list for PBXNativeTarget "X4ImageViewerDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -446,6 +447,7 @@
 				378BEDBA1B1441BD00010F90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

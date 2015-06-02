@@ -31,11 +31,16 @@
     
     
     X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,20,320,460) images:imageArray];
-//    iv.currentImageIndex = 2;
+    iv.currentImageIndex = 3;
     iv.delegate = self;
     iv.paginationType = PaginationTypeNumber;
     
     [self.view addSubview:iv];
+   
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return [scrollView viewWithTag:1];
 }
 
 - (void)didReceiveMemoryWarning {
