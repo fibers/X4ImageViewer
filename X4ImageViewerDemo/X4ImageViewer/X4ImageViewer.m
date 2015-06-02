@@ -196,7 +196,15 @@
 - (void)loadImages{
     
     self.pageControlPagination.currentPage = self.currentImageIndex;
-    self.numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", self.currentImageIndex + 1, [self.images count]];
+    NSString *text = [NSString stringWithFormat:@"%ld/%ld", self.currentImageIndex + 1, [self.images count]];
+    
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX,self.numberPagination.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
+    
+    self.numberPagination.text = text;
+    CGRect frame = self.numberPagination.frame;
+    frame.size.width = rect.size.width + 24;
+    
+    self.numberPagination.frame = frame;
     
     NSInteger previousImageIndex = self.currentImageIndex - 1;
     NSInteger nextImageIndex = self.currentImageIndex + 1;
