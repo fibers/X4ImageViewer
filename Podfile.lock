@@ -1,0 +1,15 @@
+PODS:
+  - SDWebImage (3.7.2):
+    - SDWebImage/Core (= 3.7.2)
+  - SDWebImage/Core (3.7.2)
+  - SMPageControl (1.2)
+
+DEPENDENCIES:
+  - SDWebImage
+  - SMPageControl
+
+SPEC CHECKSUMS:
+  SDWebImage: 71b7cdc1d1721d6a82ed62889030225f2c249e29
+  SMPageControl: 922892813001cfaf059e86e6801f46a967e9ee29
+
+COCOAPODS: 0.37.1

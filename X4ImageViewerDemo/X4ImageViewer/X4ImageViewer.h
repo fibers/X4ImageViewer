@@ -7,25 +7,31 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <SMPageControl.h>
 
 typedef NS_ENUM(NSInteger, PaginationType){
     PaginationTypePageControl = 0,
     PaginationTypeNumber
 };
 
-
+@class X4ImageViewer;
 @protocol X4ImageViewerDelegate <NSObject>
 
 @optional
-- (void)didTappedImageView:(UIImageView *)imageView withIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
+- (void)didTapped:(X4ImageViewer *)imageViewer withImageView:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
+- (void)didDoubleTapped:(X4ImageViewer *)imageViewer withImageView:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
 
 @end
+
 
 @interface X4ImageViewer : UIView <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) NSInteger currentImageIndex;
 @property (nonatomic, assign) PaginationType paginationType;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
+@property (nonatomic, strong) SMPageControl *pageControlPagination;
+@property (nonatomic, strong) UILabel *numberPagination;
+@property (nonatomic, assign) BOOL bZoomEnabled;
 
 - (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images;
 

@@ -27,25 +27,28 @@
                             [UIImage imageNamed:@"5.jpg"],
     ];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor greenColor];
     
     
-    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,20,320,460) images:imageArray];
+    
+    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,60,320,400) images:imageArray];
     iv.currentImageIndex = 3;
     iv.delegate = self;
     iv.paginationType = PaginationTypeNumber;
     
+
     [self.view addSubview:iv];
    
 }
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return [scrollView viewWithTag:1];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)didTapped:(X4ImageViewer *)imageViewer withImageView:(UIImageView *)imageView withIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
+    
 }
 
 
