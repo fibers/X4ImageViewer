@@ -46,13 +46,14 @@
         [self addSubview:_scrollView];
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTappedScrollView:)];
+        tapGesture.numberOfTapsRequired = 1;
         [_scrollView addGestureRecognizer:tapGesture];
         
         UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTappedScrollView:)];
         doubleTapGesture.numberOfTapsRequired = 2;
-        doubleTapGesture.numberOfTouchesRequired = 1;
         [_scrollView addGestureRecognizer:doubleTapGesture];
 
+        [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
         
         CGRect rectPagination = CGRectMake(0, self.bounds.size.height - 20, self.bounds.size.width, 20);
         
@@ -250,7 +251,14 @@
     
     if(scrollView.tag == -1){
         
-        _currentImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
+        NSInteger newImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
+        
+        if(newImageIndex != self.currentImageIndex){
+            if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didImageSwitchFrom:to:)]){
+                [self.delegate imageViewer:self didImageSwitchFrom:self.currentImageIndex to:newImageIndex];
+            }
+        }
+        _currentImageIndex = newImageIndex;
         [self loadImages];
     }
 }
@@ -267,6 +275,16 @@
     }
 }
 
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+    
+    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didEndZoomingWith:atIndex:inScrollView:)]){
+        
+        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentImageIndex];
+        UIImageView *imageView = (UIImageView *)view;
+        
+        [self.delegate imageViewer:self didEndZoomingWith:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
+    }
+}
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
     
@@ -290,12 +308,13 @@
 }
 
 - (void)onTappedScrollView:(UITapGestureRecognizer *)gesture{
-    if(self.delegate && [self.delegate respondsToSelector:@selector(didTapped:withImageView:atIndex:inScrollView:)]){
+    
+    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didTap:atIndex:inScrollView:)]){
         
         UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentImageIndex];
         UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentImageIndex];
         
-        [self.delegate didTapped:self withImageView:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
+        [self.delegate imageViewer:self didTap:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
     }
 }
 
@@ -304,9 +323,9 @@
     UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentImageIndex];
     UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentImageIndex];
     
-    if(self.delegate && [self.delegate respondsToSelector:@selector(didDoubleTapped:withImageView:atIndex:inScrollView:)]){
+    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didDoubleTap:atIndex:inScrollView:)]){
         
-        [self.delegate didDoubleTapped:self withImageView:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
+        [self.delegate imageViewer:self didDoubleTap:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
     }else{
         if(scrollView.zoomScale == scrollView.minimumZoomScale){
             scrollView.zoomScale = scrollView.maximumZoomScale;

@@ -47,9 +47,21 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)didTapped:(X4ImageViewer *)imageViewer withImageView:(UIImageView *)imageView withIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
-    
+- (void)imageViewer:(X4ImageViewer *)imageViewer didDoubleTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
+    NSLog(@"Double tapped");
 }
 
+- (void)imageViewer:(X4ImageViewer *)imageViewer didEndZoomingWith:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
+    
+    NSLog(@"End zooming");
+}
+
+- (void)imageViewer:(X4ImageViewer *)imageViewer didImageSwitchFrom:(NSInteger)oldIndex to:(NSInteger)newIndex{
+    NSLog(@"Image switched.");
+}
+
+- (void)imageViewer:(X4ImageViewer *)imageViewer didTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
+    NSLog(@"Single tapped");
+}
 
 @end
