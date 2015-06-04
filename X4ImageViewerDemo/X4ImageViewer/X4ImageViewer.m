@@ -55,7 +55,7 @@
 
         [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
         
-        CGRect rectPagination = CGRectMake(0, self.bounds.size.height - 20, self.bounds.size.width, 20);
+        CGRect rectPagination = CGRectMake(0, self.bounds.size.height - 24, self.bounds.size.width, 24);
         
         _pageControlPagination = [[SMPageControl alloc] initWithFrame:rectPagination];
         _pageControlPagination.currentPage = _currentImageIndex;
@@ -69,7 +69,7 @@
         _numberPagination.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
         _numberPagination.layer.borderWidth = 0;
         _numberPagination.layer.masksToBounds = 1;
-        _numberPagination.layer.cornerRadius = 10;
+        _numberPagination.layer.cornerRadius = 12;
         _numberPagination.font = [UIFont systemFontOfSize:15];
         _numberPagination.textColor = [UIColor whiteColor];
         _numberPagination.textAlignment = NSTextAlignmentCenter;
