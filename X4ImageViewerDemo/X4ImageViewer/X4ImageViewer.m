@@ -8,13 +8,20 @@
 
 #import "X4ImageViewer.h"
 
+static const CGFloat HeightCarousel = 24;
 
 @interface X4ImageViewer ()
 
-@property (nonatomic, strong) NSArray *images;
+//@property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) NSMutableArray *imageViews;
 @property (nonatomic, strong) NSMutableArray *innerScrollViews;
 @property (nonatomic, strong) UIScrollView *scrollView;
+
+@property (nonatomic, strong) SMPageControl *pageControl;
+@property (nonatomic, strong) UILabel *pageNumber;
+
+@property (nonatomic, assign) CGFloat carouselXRatio;
+@property (nonatomic, assign) CGFloat carouselYRatio;
 
 @end
 
@@ -22,22 +29,19 @@
 @implementation X4ImageViewer
 
 
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images{
+- (instancetype)initWithFrame:(CGRect)frame{
     
     self = [super initWithFrame:frame];
     if(self){
         
         self.backgroundColor = [UIColor blackColor];
     
-        _currentImageIndex = 0;
-        _paginationType = PaginationTypePageControl;
-        _bZoomEnabled = YES;
-        
-        _images = images;
+        _currentPageIndex = 0;
+        _carouselType = CarouselTypePageControl;
+        _bZoomEnable = YES;
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         _scrollView.delegate = self;
-        _scrollView.contentSize = CGSizeMake(_scrollView.bounds.size.width * [_images count], _scrollView.bounds.size.height);
         _scrollView.pagingEnabled = YES;
         _scrollView.scrollEnabled = YES;
         _scrollView.bounces = NO;
@@ -55,108 +59,174 @@
 
         [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
         
-        CGRect rectPagination = CGRectMake(0, self.bounds.size.height - 24, self.bounds.size.width, 24);
+        CGRect rectPagination = CGRectMake(0, self.bounds.size.height - HeightCarousel, self.bounds.size.width, HeightCarousel);
         
-        _pageControlPagination = [[SMPageControl alloc] initWithFrame:rectPagination];
-        _pageControlPagination.currentPage = _currentImageIndex;
-        _pageControlPagination.numberOfPages = [_images count];
-        _pageControlPagination.hidesForSinglePage = YES;
-        _pageControlPagination.defersCurrentPageDisplay = YES;
-        _pageControlPagination.hidden = NO;
-        [self addSubview:_pageControlPagination];
+        _carouselXRatio = (rectPagination.origin.x + rectPagination.size.width / 2) / self.bounds.size.width;
+        _carouselYRatio = (rectPagination.origin.y + rectPagination.size.height / 2) / self.bounds.size.height;
         
-        _numberPagination = [[UILabel alloc] initWithFrame:rectPagination];
-        _numberPagination.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-        _numberPagination.layer.borderWidth = 0;
-        _numberPagination.layer.masksToBounds = 1;
-        _numberPagination.layer.cornerRadius = 12;
-        _numberPagination.font = [UIFont systemFontOfSize:15];
-        _numberPagination.textColor = [UIColor whiteColor];
-        _numberPagination.textAlignment = NSTextAlignmentCenter;
-        _numberPagination.text = [NSString stringWithFormat:@"%ld/%ld", _currentImageIndex + 1, [_images count]];
-        _numberPagination.hidden = YES;
-        [self addSubview:_numberPagination];
+        _pageControl = [[SMPageControl alloc] initWithFrame:rectPagination];
+        _pageControl.currentPage = _currentPageIndex;
+        _pageControl.hidesForSinglePage = YES;
+        _pageControl.defersCurrentPageDisplay = YES;
+        _pageControl.hidden = NO;
+        [self addSubview:_pageControl];
+        
+        _pageNumber = [[UILabel alloc] initWithFrame:rectPagination];
+        _pageNumber.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        _pageNumber.layer.borderWidth = 0;
+        _pageNumber.layer.masksToBounds = YES;
+        _pageNumber.layer.cornerRadius = 12;
+        _pageNumber.font = [UIFont systemFontOfSize:15];
+        _pageNumber.textColor = [UIColor whiteColor];
+        _pageNumber.textAlignment = NSTextAlignmentCenter;
+        _pageNumber.hidden = YES;
+        [self addSubview:_pageNumber];
         
         _imageViews = [[NSMutableArray alloc] init];
         _innerScrollViews = [[NSMutableArray alloc] init];
         
-        for(NSUInteger i=0; i<[images count]; i++){
-            UIImage *image = [images objectAtIndex:i];
-            
-            CGRect rectInnerScrollView = _scrollView.bounds;
-            rectInnerScrollView.origin.x = i * _scrollView.bounds.size.width;
-            rectInnerScrollView.origin.y = 0;
-            
-            UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:rectInnerScrollView];
-            
-            UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,image.size.width,image.size.height)];
-            iv.contentMode = UIViewContentModeScaleAspectFit;
-            
-            [scrollView addSubview:iv];
-            [_imageViews addObject:iv];
-            
-            scrollView.delegate = self;
-            scrollView.contentSize = image.size;
-            scrollView.pagingEnabled = NO;
-            scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
-            scrollView.tag = i;
-            
-            CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / scrollView.contentSize.width;
-            CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / scrollView.contentSize.height;
-            CGFloat minScale = MIN(scaleWidth, scaleHeight);
-        
-            scrollView.minimumZoomScale = minScale;
-            if(_bZoomEnabled){
-                scrollView.maximumZoomScale = 1;
-            }else{
-                scrollView.maximumZoomScale = minScale;
-            }
-            
-            
-            [_innerScrollViews addObject:scrollView];
-            scrollView.zoomScale = scrollView.minimumZoomScale;
-
-        }
-        
-        [self loadImages];
-
         return self;
     }
     return nil;
 }
 
+- (void)layoutSubviews{
+    
+    self.scrollView.frame = self.bounds;
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width * [self.images count], self.scrollView.bounds.size.height);
+     self.scrollView.contentOffset = CGPointMake(self.currentPageIndex * self.scrollView.bounds.size.width, 0);
+    
+    CGPoint carouselCenter = CGPointMake(self.bounds.size.width * self.carouselXRatio, self.bounds.size.height * self.carouselYRatio);
+    CGRect rectPageControl = self.pageControl.frame;
+    
+    rectPageControl.origin.y = carouselCenter.y - rectPageControl.size.height / 2;
+    rectPageControl.size.width = self.bounds.size.width;
+    self.pageControl.frame = rectPageControl;
+    
+    self.pageNumber.center = carouselCenter;
+    
+    for(NSUInteger i=0; i<[self.images count]; i++){
+        
+        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:i];
+        UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:i];
+        
+        scrollView.frame = CGRectMake(i * self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+        
+        CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
+        CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
+        CGFloat minScale = MIN(scaleWidth, scaleHeight);
+        
+        scrollView.minimumZoomScale = minScale;
+        if(self.bZoomEnable){
+            scrollView.maximumZoomScale = 1;
+        }else{
+            scrollView.maximumZoomScale = minScale;
+        }
+        
+        scrollView.zoomScale = scrollView.minimumZoomScale;
+    }
+    
+    [self loadImages];
 
-- (void)setPaginationType:(PaginationType)paginationType{
+}
+
+- (void)setImages:(NSArray *)images{
     
-    _paginationType = paginationType;
+    _images = images;
+    self.pageControl.numberOfPages = [self.images count];
     
-    if(self.paginationType == PaginationTypeNumber){
-        self.pageControlPagination.hidden = YES;
-        self.numberPagination.hidden = NO;
-    }else if(self.paginationType == PaginationTypePageControl){
-        self.pageControlPagination.hidden = NO;
-        self.numberPagination.hidden = YES;
+    for(NSUInteger i=0; i<[self.images count]; i++){
+
+        UIImage *image = [images objectAtIndex:i];
+
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(i * self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
+
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+
+        [scrollView addSubview:imageView];
+        [self.imageViews addObject:imageView];
+
+        scrollView.delegate = self;
+        scrollView.contentSize = imageView.bounds.size;
+        scrollView.pagingEnabled = NO;
+        scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
+        scrollView.tag = i;
+
+        CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
+        CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
+        CGFloat minScale = MIN(scaleWidth, scaleHeight);
+
+        scrollView.minimumZoomScale = minScale;
+        if(self.bZoomEnable){
+            scrollView.maximumZoomScale = 1;
+        }else{
+            scrollView.maximumZoomScale = minScale;
+        }
+
+        [self.innerScrollViews addObject:scrollView];
+        scrollView.zoomScale = scrollView.minimumZoomScale;
+    }
+
+    [self setNeedsLayout];
+    
+}
+
+
+- (void)setCarouselType:(CarouselType)carouselType{
+    
+    _carouselType = carouselType;
+    
+    if(self.carouselType == CarouselTypePageControl){
+        self.pageControl.hidden = NO;
+        self.pageNumber.hidden = YES;
+    }else if(self.carouselType == CarouselTypePageNumber){
+        self.pageControl.hidden = YES;
+        self.pageNumber.hidden = NO;
     }else{
-        self.pageControlPagination.hidden = NO;
-        self.numberPagination.hidden = YES;
+        self.pageControl.hidden = NO;
+        self.pageNumber.hidden = YES;
     }
     
 }
 
-- (void)setCurrentImageIndex:(NSInteger)currentImageIndex{
-    _currentImageIndex = currentImageIndex;
-    self.scrollView.contentOffset = CGPointMake(self.scrollView.bounds.size.width * self.currentImageIndex, 0);
+- (void)setCarouselCenter:(CGPoint)carouselCenter{
+    
+    _carouselCenter = carouselCenter;
+    
+    CGPoint center = self.pageControl.center;
+    center.y = self.carouselCenter.y;
+    self.pageControl.center = center;
+    
+    self.pageNumber.center = self.carouselCenter;
+    
+    self.carouselXRatio = self.carouselCenter.x / self.bounds.size.width;
+    self.carouselYRatio = self.carouselCenter.y / self.bounds.size.height;
 }
 
-- (void)setBZoomEnabled:(BOOL)bZoomEnabled{
-    _bZoomEnabled = bZoomEnabled;
+- (void)setCurrentPageIndex:(NSInteger)currentPageIndex{
+    _currentPageIndex = currentPageIndex;
+    self.scrollView.contentOffset = CGPointMake(self.scrollView.bounds.size.width * self.currentPageIndex, 0);
+}
+
+- (void)setBZoomEnable:(BOOL)bZoomEnable{
+    _bZoomEnable = bZoomEnable;
     for(UIScrollView *scrollView in self.innerScrollViews){
-        if(self.bZoomEnabled){
+        if(self.bZoomEnable){
             scrollView.maximumZoomScale = 1;
         }else{
             scrollView.maximumZoomScale = scrollView.minimumZoomScale;
         }
     }
+}
+
+
+- (void)setPageControlIndicatorImage:(UIImage *)indicatorImage{
+    self.pageControl.pageIndicatorImage = indicatorImage;
+}
+
+- (void)setPageControlCurrentIndicatorImage:(UIImage *)currentIndicatorImage{
+    self.pageControl.currentPageIndicatorImage = currentIndicatorImage;
 }
 
 
@@ -217,19 +287,18 @@
 
 - (void)loadImages{
     
-    self.pageControlPagination.currentPage = self.currentImageIndex;
-    NSString *text = [NSString stringWithFormat:@"%ld/%ld", self.currentImageIndex + 1, [self.images count]];
+    self.pageControl.currentPage = self.currentPageIndex;
     
-    CGRect rect = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX,self.numberPagination.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
+    NSString *text = [NSString stringWithFormat:@"%ld/%ld", self.currentPageIndex + 1, [self.images count]];
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX,self.pageNumber.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
     
-    self.numberPagination.text = text;
-    CGRect frame = self.numberPagination.frame;
+    self.pageNumber.text = text;
+    CGRect frame = self.pageNumber.frame;
     frame.size.width = rect.size.width + 24;
+    self.pageNumber.frame = frame;
     
-    self.numberPagination.frame = frame;
-    
-    NSInteger previousImageIndex = self.currentImageIndex - 1;
-    NSInteger nextImageIndex = self.currentImageIndex + 1;
+    NSInteger previousImageIndex = self.currentPageIndex - 1;
+    NSInteger nextImageIndex = self.currentPageIndex + 1;
     
     for(NSInteger i=0; i<previousImageIndex; i++){
         [self removeImageAtIndex:i];
@@ -249,16 +318,16 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-    if(scrollView.tag == -1){
+    if(scrollView.tag == -1 && scrollView.isDragging ){
         
         NSInteger newImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
         
-        if(newImageIndex != self.currentImageIndex){
+        if(newImageIndex != self.currentPageIndex){
             if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didImageSwitchFrom:to:)]){
-                [self.delegate imageViewer:self didImageSwitchFrom:self.currentImageIndex to:newImageIndex];
+                [self.delegate imageViewer:self didImageSwitchFrom:self.currentPageIndex to:newImageIndex];
             }
         }
-        _currentImageIndex = newImageIndex;
+        _currentPageIndex = newImageIndex;
         [self loadImages];
     }
 }
@@ -279,10 +348,10 @@
     
     if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didEndZoomingWith:atIndex:inScrollView:)]){
         
-        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentImageIndex];
+        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentPageIndex];
         UIImageView *imageView = (UIImageView *)view;
         
-        [self.delegate imageViewer:self didEndZoomingWith:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
+        [self.delegate imageViewer:self didEndZoomingWith:imageView atIndex:self.currentPageIndex inScrollView:scrollView];
     }
 }
 
@@ -300,7 +369,7 @@
     
     UIView *view = [super hitTest:point withEvent:event];
     
-    if(view == self || view == self.pageControlPagination || view == self.numberPagination){
+    if(view == self || view == self.pageControl || view == self.pageNumber){
         return self.scrollView;
     }
 
@@ -311,21 +380,21 @@
     
     if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didTap:atIndex:inScrollView:)]){
         
-        UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentImageIndex];
-        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentImageIndex];
+        UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentPageIndex];
+        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentPageIndex];
         
-        [self.delegate imageViewer:self didTap:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
+        [self.delegate imageViewer:self didTap:imageView atIndex:self.currentPageIndex inScrollView:scrollView];
     }
 }
 
 - (void)onDoubleTappedScrollView:(UITapGestureRecognizer *)gesture{
     
-    UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentImageIndex];
-    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentImageIndex];
+    UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentPageIndex];
+    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentPageIndex];
     
     if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didDoubleTap:atIndex:inScrollView:)]){
         
-        [self.delegate imageViewer:self didDoubleTap:imageView atIndex:self.currentImageIndex inScrollView:scrollView];
+        [self.delegate imageViewer:self didDoubleTap:imageView atIndex:self.currentPageIndex inScrollView:scrollView];
     }else{
         if(scrollView.zoomScale == scrollView.minimumZoomScale){
             scrollView.zoomScale = scrollView.maximumZoomScale;

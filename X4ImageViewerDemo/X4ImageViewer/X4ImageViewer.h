@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <SMPageControl.h>
 
-typedef NS_ENUM(NSInteger, PaginationType){
-    PaginationTypePageControl = 0,
-    PaginationTypeNumber
+typedef NS_ENUM(NSInteger, CarouselType){
+    CarouselTypePageControl = 0,
+    CarouselTypePageNumber
 };
+
 
 @class X4ImageViewer;
 @protocol X4ImageViewerDelegate <NSObject>
@@ -26,19 +27,24 @@ typedef NS_ENUM(NSInteger, PaginationType){
 @end
 
 
-@interface X4ImageViewer : UIView <UIScrollViewDelegate, UIGestureRecognizerDelegate>
+@interface X4ImageViewer : UIView <UIScrollViewDelegate>
 
-@property (nonatomic, assign) NSInteger currentImageIndex;
-@property (nonatomic, assign) PaginationType paginationType;
+
+@property (nonatomic, assign) BOOL bZoomEnable;
+@property (nonatomic, assign) NSInteger currentPageIndex;
+@property (nonatomic, assign) CGPoint carouselCenter;
+@property (nonatomic, assign) CarouselType carouselType;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
-@property (nonatomic, strong) SMPageControl *pageControlPagination;
-@property (nonatomic, strong) UILabel *numberPagination;
-@property (nonatomic, assign) BOOL bZoomEnabled;
+@property (nonatomic, strong) NSArray *images;
 
-- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images;
+
+//- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images;
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
+- (instancetype)initWithFrame:(CGRect)frame;
+
+- (void)setPageControlIndicatorImage:(UIImage *)indicatorImage;
+- (void)setPageControlCurrentIndicatorImage:(UIImage *)currentIndicatorImage;
 
 
 @end
