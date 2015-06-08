@@ -7,6 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "X4ImageView.h"
+#import "AppDelegate.h"
+#import "UIImageView+X4ImageViewer.h"
 
 
 @interface ViewController ()
@@ -37,10 +40,22 @@
     iv.paginationType = PaginationTypeNumber;
     
 
-    [self.view addSubview:iv];
-   
+    X4ImageView *x4ImageView = [[X4ImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
+    
+    x4ImageView.image = [UIImage imageNamed:@"1.jpg"];
+    
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
+    
+    imageView.image = [UIImage imageNamed:@"1.jpg"];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.userInteractionEnabled = YES;
+    
+    [self.view addSubview:imageView];
+    
+    [imageView enableClickToFullScreen];
+    
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -19,6 +19,8 @@
 		378BEDC61B1445EF00010F90 /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDC11B1445EF00010F90 /* 3.jpg */; };
 		378BEDC71B1445EF00010F90 /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDC21B1445EF00010F90 /* 2.jpg */; };
 		378BEDC81B1445EF00010F90 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 378BEDC31B1445EF00010F90 /* 1.jpg */; };
+		37B7B8491B23F14A00DA4371 /* X4ImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B7B8481B23F14A00DA4371 /* X4ImageView.m */; };
+		37B7B8551B24952500DA4371 /* UIImageView+X4ImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B7B8541B24952500DA4371 /* UIImageView+X4ImageViewer.m */; };
 		41DF770E050F559B61525B00 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E6A7F681E7C8B1B3E19692 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,10 @@
 		378BEDC11B1445EF00010F90 /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
 		378BEDC21B1445EF00010F90 /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
 		378BEDC31B1445EF00010F90 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
+		37B7B8471B23F14A00DA4371 /* X4ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X4ImageView.h; sourceTree = "<group>"; };
+		37B7B8481B23F14A00DA4371 /* X4ImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = X4ImageView.m; sourceTree = "<group>"; };
+		37B7B8531B24952500DA4371 /* UIImageView+X4ImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+X4ImageViewer.h"; sourceTree = "<group>"; };
+		37B7B8541B24952500DA4371 /* UIImageView+X4ImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+X4ImageViewer.m"; sourceTree = "<group>"; };
 		40BFB2644F37011A35DE12F3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A1F08AA24818079ED3E4BC0D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -147,6 +153,10 @@
 			children = (
 				378BEDBC1B1441EB00010F90 /* X4ImageViewer.h */,
 				378BEDBD1B1441EB00010F90 /* X4ImageViewer.m */,
+				37B7B8471B23F14A00DA4371 /* X4ImageView.h */,
+				37B7B8481B23F14A00DA4371 /* X4ImageView.m */,
+				37B7B8531B24952500DA4371 /* UIImageView+X4ImageViewer.h */,
+				37B7B8541B24952500DA4371 /* UIImageView+X4ImageViewer.m */,
 			);
 			path = X4ImageViewer;
 			sourceTree = "<group>";
@@ -311,6 +321,8 @@
 				378BED9B1B1441BD00010F90 /* AppDelegate.m in Sources */,
 				378BED981B1441BD00010F90 /* main.m in Sources */,
 				378BEDBE1B1441EB00010F90 /* X4ImageViewer.m in Sources */,
+				37B7B8551B24952500DA4371 /* UIImageView+X4ImageViewer.m in Sources */,
+				37B7B8491B23F14A00DA4371 /* X4ImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
