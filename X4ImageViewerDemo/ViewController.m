@@ -7,9 +7,8 @@
 //
 
 #import "ViewController.h"
-#import "X4ImageView.h"
 #import "AppDelegate.h"
-#import "UIImageView+X4ImageViewer.h"
+#import "UIImageView+ClickToFullScreen.h"
 
 
 @interface ViewController ()
@@ -28,7 +27,7 @@
     self.imageArray1 = @[
                             [UIImage imageNamed:@"1.jpg"],
                             [UIImage imageNamed:@"2.jpg"],
-                            [UIImage imageNamed:@"3.jpg"]
+                            [UIImage imageNamed:@"6.jpg"]
                             ];
     
     self.imageArray2 = @[
@@ -48,24 +47,19 @@
     iv.carouselCenter = CGPointMake(160, 380);
     iv.carouselType = CarouselTypePageNumber;
     iv.bZoomEnable = YES;
+    iv.bZoomRestoreAfterDimissed = YES;
 
-    [self.view addSubview:iv];
+//    [self.view addSubview:iv];
     
     
-//    X4ImageView *x4ImageView = [[X4ImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
-//    
-//    x4ImageView.image = [UIImage imageNamed:@"1.jpg"];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
     
+    imageView.image = [UIImage imageNamed:@"6.jpg"];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
     
-//    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
-//    
-//    imageView.image = [UIImage imageNamed:@"1.jpg"];
-//    imageView.contentMode = UIViewContentModeScaleAspectFit;
-//    imageView.userInteractionEnabled = YES;
-//    
-//    [self.view addSubview:imageView];
-//    
-//    [imageView enableClickToFullScreen];
+    [self.view addSubview:imageView];
+    
+    [imageView enableClickToFullScreen];
     
 }
 
@@ -75,9 +69,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)imageViewer:(X4ImageViewer *)imageViewer didDoubleTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
-    NSLog(@"Double tapped");
-}
+//- (void)imageViewer:(X4ImageViewer *)imageViewer didDoubleTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
+//    NSLog(@"Double tapped");
+//}
 
 - (void)imageViewer:(X4ImageViewer *)imageViewer didEndZoomingWith:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
     
@@ -92,7 +86,7 @@
     NSLog(@"Single tapped");
     
 //    imageViewer.frame = CGRectMake(20, 20, 200, 200);
-    imageViewer.images = self.imageArray2;
+//    imageViewer.images = self.imageArray2;
 }
 
 @end

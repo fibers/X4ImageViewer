@@ -38,6 +38,7 @@ static const CGFloat HeightCarousel = 24;
         _currentPageIndex = 0;
         _carouselType = CarouselTypePageControl;
         _bZoomEnable = YES;
+        _bZoomRestoreAfterDimissed = YES;
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         _scrollView.delegate = self;
@@ -117,15 +118,29 @@ static const CGFloat HeightCarousel = 24;
         CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
         CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
         CGFloat minScale = MIN(scaleWidth, scaleHeight);
+        CGFloat maxScale = MAX(scaleWidth, scaleHeight);
         
-        scrollView.minimumZoomScale = minScale;
-        if(self.bZoomEnable){
-            scrollView.maximumZoomScale = 1;
+        if(minScale >= 1){
+            
+            scrollView.minimumZoomScale = 1;
+            if(self.bZoomEnable){
+                scrollView.maximumZoomScale = maxScale;
+            }else{
+                scrollView.maximumZoomScale = 1;
+            }
+            
         }else{
-            scrollView.maximumZoomScale = minScale;
+            scrollView.minimumZoomScale = minScale;
+            if(self.bZoomEnable){
+                scrollView.maximumZoomScale = 1;
+            }else{
+                scrollView.maximumZoomScale = minScale;
+            }
         }
         
         scrollView.zoomScale = scrollView.minimumZoomScale;
+        
+        [self move:imageView toCenterOf:scrollView];
     }
     
     [self loadImages];
@@ -233,6 +248,22 @@ static const CGFloat HeightCarousel = 24;
 }
 
 
+- (void)restoreImageAtIndex:(NSInteger)index{
+    
+    if(index < 0 || index >= [self.images count]){
+        return;
+    }
+    
+    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
+    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
+    
+    if(ivImage.image){
+        scrollView.zoomScale = scrollView.minimumZoomScale;
+    }
+}
+
+
+
 - (void)removeImageAtIndex:(NSInteger)index{
     
     if(index < 0 || index >= [self.images count]){
@@ -307,13 +338,29 @@ static const CGFloat HeightCarousel = 24;
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
     if(scrollView.tag >= 0){
-        [self moveImageToCenter:scrollView.tag];
+    
+        UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:scrollView.tag];
+        
+        [self move:imageView toCenterOf:scrollView];
+        
         if(scrollView.minimumZoomScale == scrollView.zoomScale){
             scrollView.scrollEnabled = NO;
         }else{
             scrollView.scrollEnabled = YES;
         }
     }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
+    if(self.bZoomRestoreAfterDimissed){
+        NSInteger previousImageIndex = self.currentPageIndex - 1;
+        [self restoreImageAtIndex:previousImageIndex];
+        
+        NSInteger nextImageIndex = self.currentPageIndex + 1;
+        [self restoreImageAtIndex:nextImageIndex];
+    }
+
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
@@ -377,13 +424,9 @@ static const CGFloat HeightCarousel = 24;
 }
 
 
-- (void)moveImageToCenter:(NSInteger)index{
-    
-    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
-    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
-    
+- (void)move:(UIImageView *)imageView toCenterOf:(UIScrollView *)scrollView{
     CGSize scrollViewSize = scrollView.bounds.size;
-    CGRect imageFrame = ivImage.frame;
+    CGRect imageFrame = imageView.frame;
     
     if(imageFrame.size.width < scrollViewSize.width){
         imageFrame.origin.x = (scrollViewSize.width - imageFrame.size.width) / 2;
@@ -397,8 +440,8 @@ static const CGFloat HeightCarousel = 24;
         imageFrame.origin.y = 0;
     }
     
-    ivImage.frame = imageFrame;
+    imageView.frame = imageFrame;
+    
 }
-
 
 @end

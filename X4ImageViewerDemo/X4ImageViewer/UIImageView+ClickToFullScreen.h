@@ -1,5 +1,5 @@
 //
-//  X4ImageView.h
+//  UIImageView+ClickToFullScreen.h
 //  X4ImageViewerDemo
 //
 //  Created by shengyuhong on 15/6/7.
@@ -8,10 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface X4ImageView : UIView <UIScrollViewDelegate>
+@interface UIImageView (ClickToFullScreen) <UIScrollViewDelegate>
 
-
-- (void)setImage:(UIImage *)image;
-- (UIImage *)image;
+- (void)enableClickToFullScreen;
 
 @end

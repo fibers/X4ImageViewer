@@ -1,18 +1,20 @@
 //
-//  UIImageView+X4ImageViewer.m
+//  UIImageView+ClickToFullScreen.m
 //  X4ImageViewerDemo
 //
 //  Created by shengyuhong on 15/6/7.
 //  Copyright (c) 2015年 Doit. All rights reserved.
 //
 
-#import "UIImageView+X4ImageViewer.h"
+#import "UIImageView+ClickToFullScreen.h"
 
 static const NSUInteger TagImageView = 1000;
 
-@implementation UIImageView (X4ImageViewer)
+@implementation UIImageView (ClickToFullScreen)
 
 - (void)enableClickToFullScreen{
+    
+    self.userInteractionEnabled = YES;
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapToFullScreen:)];
     [self addGestureRecognizer:tapGesture];
 }
@@ -23,7 +25,6 @@ static const NSUInteger TagImageView = 1000;
     CGRect rectInWindow = [self convertRect:self.bounds toView:window];
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:window.bounds];
-    
     scrollView.delegate = self;
     scrollView.backgroundColor = [UIColor blackColor];
     scrollView.alpha = 0;
@@ -33,46 +34,55 @@ static const NSUInteger TagImageView = 1000;
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.contentSize = self.image.size;
-
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapToNormal:)];
     [scrollView addGestureRecognizer:tapGesture];
     
-    
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:rectInWindow];
     imageView.tag = TagImageView;
     imageView.image = self.image;
-    imageView.backgroundColor = [UIColor clearColor];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.contentMode = self.contentMode;
     
     [scrollView addSubview:imageView];
 
     [window addSubview:scrollView];
     
     [UIView animateWithDuration:0.5 animations:^{
-        
+
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.frame = window.bounds;
         scrollView.alpha = 1;
         
     } completion:^(BOOL finished) {
         
-        imageView.frame = CGRectMake(0, 0, scrollView.contentSize.width, scrollView.contentSize.height);
+        imageView.frame = CGRectMake(0, 0, self.image.size.width, self.image.size.height);
         
-        CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / scrollView.contentSize.width;
-        CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / scrollView.contentSize.height;
+        CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
+        CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
         CGFloat minScale = MIN(scaleWidth, scaleHeight);
-    
-        scrollView.minimumZoomScale = minScale;
-        scrollView.maximumZoomScale = 1;
-    
+        CGFloat maxScale = MAX(scaleWidth, scaleHeight);
+        
+        if(minScale >= 1){
+            scrollView.minimumZoomScale = 1;
+            scrollView.maximumZoomScale = maxScale;
+        }else{
+            scrollView.minimumZoomScale = minScale;
+            scrollView.maximumZoomScale = 1;
+        }
+        
         scrollView.zoomScale = minScale;
         scrollView.scrollEnabled = YES;
+        
+        [self move:imageView toCenterOf:scrollView];
 
     }];
     
 }
 
 - (void)onTapToNormal:(UITapGestureRecognizer *)gesture{
+    
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGRect rectInWindow = [self convertRect:self.bounds toView:window];
     
     UIScrollView *scrollView = (UIScrollView *)gesture.view;
     UIImageView *imageView = (UIImageView *)[scrollView viewWithTag:TagImageView];
@@ -83,7 +93,7 @@ static const NSUInteger TagImageView = 1000;
     [UIView animateWithDuration:0.5 animations:^{
         
         scrollView.zoomScale = scrollView.minimumZoomScale;
-        imageView.frame = self.frame;
+        imageView.frame = rectInWindow;
         scrollView.alpha = 0;
         
     } completion:^(BOOL finished) {
@@ -96,6 +106,14 @@ static const NSUInteger TagImageView = 1000;
     
     UIImageView *imageView = (UIImageView *)[scrollView viewWithTag:1000];
     
+    [self move:imageView toCenterOf:scrollView];
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    return [scrollView viewWithTag:1000];
+}
+
+- (void)move:(UIImageView *)imageView toCenterOf:(UIScrollView *)scrollView{
     CGSize scrollViewSize = scrollView.bounds.size;
     CGRect imageFrame = imageView.frame;
     
@@ -112,10 +130,7 @@ static const NSUInteger TagImageView = 1000;
     }
     
     imageView.frame = imageFrame;
-}
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return [scrollView viewWithTag:1000];
 }
 
 

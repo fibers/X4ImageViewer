@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, CarouselType){
 
 
 @property (nonatomic, assign) BOOL bZoomEnable;
+@property (nonatomic, assign) BOOL bZoomRestoreAfterDimissed;
 @property (nonatomic, assign) NSInteger currentPageIndex;
 @property (nonatomic, assign) CGPoint carouselCenter;
 @property (nonatomic, assign) CarouselType carouselType;
