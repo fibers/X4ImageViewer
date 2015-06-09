@@ -12,7 +12,6 @@ static const CGFloat HeightCarousel = 24;
 
 @interface X4ImageViewer ()
 
-//@property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) NSMutableArray *imageViews;
 @property (nonatomic, strong) NSMutableArray *innerScrollViews;
 @property (nonatomic, strong) UIScrollView *scrollView;

@@ -37,9 +37,6 @@ typedef NS_ENUM(NSInteger, CarouselType){
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
 @property (nonatomic, strong) NSArray *images;
 
-
-//- (instancetype)initWithFrame:(CGRect)frame images:(NSArray *)images;
-
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithFrame:(CGRect)frame;
 
