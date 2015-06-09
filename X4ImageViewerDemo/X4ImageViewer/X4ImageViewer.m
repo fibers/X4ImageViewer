@@ -91,16 +91,19 @@ static const CGFloat HeightCarousel = 24;
 
 - (void)layoutSubviews{
     
+    _currentPageIndex = self.currentPageIndex < [self.images count] ? self.currentPageIndex : 0;
+    
     self.scrollView.frame = self.bounds;
     self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width * [self.images count], self.scrollView.bounds.size.height);
-     self.scrollView.contentOffset = CGPointMake(self.currentPageIndex * self.scrollView.bounds.size.width, 0);
+    self.scrollView.contentOffset = CGPointMake(self.currentPageIndex * self.scrollView.bounds.size.width, 0);
     
     CGPoint carouselCenter = CGPointMake(self.bounds.size.width * self.carouselXRatio, self.bounds.size.height * self.carouselYRatio);
-    CGRect rectPageControl = self.pageControl.frame;
-    
-    rectPageControl.origin.y = carouselCenter.y - rectPageControl.size.height / 2;
-    rectPageControl.size.width = self.bounds.size.width;
-    self.pageControl.frame = rectPageControl;
+    CGRect boundsPageControl = self.pageControl.bounds;
+    boundsPageControl.size.width = self.bounds.size.width;
+    self.pageControl.bounds = boundsPageControl;
+    CGPoint centerPageControl = self.pageControl.center;
+    centerPageControl.y = self.carouselCenter.y;
+    self.pageControl.center = centerPageControl;
     
     self.pageNumber.center = carouselCenter;
     
@@ -130,16 +133,22 @@ static const CGFloat HeightCarousel = 24;
 }
 
 - (void)setImages:(NSArray *)images{
+
+    [self removeAllImages];
+    
+    [self.imageViews removeAllObjects];
+    [self.innerScrollViews removeAllObjects];
     
     _images = images;
+    
     self.pageControl.numberOfPages = [self.images count];
     
     for(NSUInteger i=0; i<[self.images count]; i++){
 
         UIImage *image = [images objectAtIndex:i];
 
-        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(i * self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
-
+        UIScrollView *scrollView = [[UIScrollView alloc] init];
+        
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
 
@@ -152,23 +161,10 @@ static const CGFloat HeightCarousel = 24;
         scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
         scrollView.tag = i;
 
-        CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
-        CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
-        CGFloat minScale = MIN(scaleWidth, scaleHeight);
-
-        scrollView.minimumZoomScale = minScale;
-        if(self.bZoomEnable){
-            scrollView.maximumZoomScale = 1;
-        }else{
-            scrollView.maximumZoomScale = minScale;
-        }
-
         [self.innerScrollViews addObject:scrollView];
-        scrollView.zoomScale = scrollView.minimumZoomScale;
     }
-
-    [self setNeedsLayout];
     
+    [self setNeedsLayout];
 }
 
 
@@ -186,37 +182,28 @@ static const CGFloat HeightCarousel = 24;
         self.pageControl.hidden = NO;
         self.pageNumber.hidden = YES;
     }
-    
 }
 
 - (void)setCarouselCenter:(CGPoint)carouselCenter{
     
     _carouselCenter = carouselCenter;
     
-    CGPoint center = self.pageControl.center;
-    center.y = self.carouselCenter.y;
-    self.pageControl.center = center;
-    
-    self.pageNumber.center = self.carouselCenter;
-    
     self.carouselXRatio = self.carouselCenter.x / self.bounds.size.width;
     self.carouselYRatio = self.carouselCenter.y / self.bounds.size.height;
+
+    [self setNeedsLayout];
 }
 
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex{
     _currentPageIndex = currentPageIndex;
-    self.scrollView.contentOffset = CGPointMake(self.scrollView.bounds.size.width * self.currentPageIndex, 0);
+    
+    [self setNeedsLayout];
 }
 
 - (void)setBZoomEnable:(BOOL)bZoomEnable{
     _bZoomEnable = bZoomEnable;
-    for(UIScrollView *scrollView in self.innerScrollViews){
-        if(self.bZoomEnable){
-            scrollView.maximumZoomScale = 1;
-        }else{
-            scrollView.maximumZoomScale = scrollView.minimumZoomScale;
-        }
-    }
+ 
+    [self setNeedsLayout];
 }
 
 
@@ -242,21 +229,6 @@ static const CGFloat HeightCarousel = 24;
 
         ivImage.image = (UIImage *)[self.images objectAtIndex:index];
         [self.scrollView addSubview:scrollView];
-    }
-}
-
-- (void)restoreImageAtIndex:(NSInteger)index{
-    
-    if(index < 0 || index >= [self.images count]){
-        return;
-    }
-    
-    UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
-    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
-    
-    if(ivImage.image){
-        
-        scrollView.zoomScale = self.scrollView.minimumZoomScale;
     }
 }
 
@@ -289,12 +261,13 @@ static const CGFloat HeightCarousel = 24;
     self.pageControl.currentPage = self.currentPageIndex;
     
     NSString *text = [NSString stringWithFormat:@"%ld/%ld", self.currentPageIndex + 1, [self.images count]];
-    CGRect rect = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX,self.pageNumber.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.pageNumber.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
     
     self.pageNumber.text = text;
-    CGRect frame = self.pageNumber.frame;
-    frame.size.width = rect.size.width + 24;
-    self.pageNumber.frame = frame;
+    
+    CGRect boundsPageNumber = self.pageNumber.bounds;
+    boundsPageNumber.size.width = rect.size.width + 24;
+    self.pageNumber.bounds = boundsPageNumber;
     
     NSInteger previousImageIndex = self.currentPageIndex - 1;
     NSInteger nextImageIndex = self.currentPageIndex + 1;

@@ -14,6 +14,9 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) NSArray *imageArray1;
+@property (nonatomic, strong) NSArray *imageArray2;
+
 @end
 
 @implementation ViewController
@@ -22,30 +25,33 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    NSArray *imageArray = @[
+    self.imageArray1 = @[
                             [UIImage imageNamed:@"1.jpg"],
                             [UIImage imageNamed:@"2.jpg"],
-                            [UIImage imageNamed:@"3.jpg"],
+                            [UIImage imageNamed:@"3.jpg"]
+                            ];
+    
+    self.imageArray2 = @[
                             [UIImage imageNamed:@"4.jpg"],
-                            [UIImage imageNamed:@"5.jpg"],
-                        ];
+                            [UIImage imageNamed:@"5.jpg"]
+                            ];
+
     
     self.view.backgroundColor = [UIColor greenColor];
     
     
     
     X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,60,320,400)];
-    iv.images = imageArray;
-    iv.currentPageIndex = 1;
     iv.delegate = self;
-    iv.carouselCenter = CGPointMake(160, 300);
+    iv.images = self.imageArray1;
+    iv.currentPageIndex = 3;
+    iv.carouselCenter = CGPointMake(160, 380);
     iv.carouselType = CarouselTypePageNumber;
-    
+    iv.bZoomEnable = YES;
+
     [self.view addSubview:iv];
     
-
     
-
 //    X4ImageView *x4ImageView = [[X4ImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
 //    
 //    x4ImageView.image = [UIImage imageNamed:@"1.jpg"];
@@ -85,7 +91,8 @@
 - (void)imageViewer:(X4ImageViewer *)imageViewer didTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
     NSLog(@"Single tapped");
     
-    imageViewer.frame = CGRectMake(20, 20, 200, 200);
+//    imageViewer.frame = CGRectMake(20, 20, 200, 200);
+    imageViewer.images = self.imageArray2;
 }
 
 @end
