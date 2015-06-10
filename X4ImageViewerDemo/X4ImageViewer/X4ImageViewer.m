@@ -40,6 +40,9 @@ static const CGFloat HeightCarousel = 24;
     if(self){
         
         self.backgroundColor = [UIColor blackColor];
+        
+        [SVProgressHUD setBackgroundColor:[UIColor blackColor]];
+        [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     
         _currentPageIndex = 0;
         _carouselType = CarouselTypePageControl;
@@ -97,6 +100,7 @@ static const CGFloat HeightCarousel = 24;
     }
     return nil;
 }
+
 
 - (void)layoutSubviews{
     
@@ -171,6 +175,10 @@ static const CGFloat HeightCarousel = 24;
     
     self.pageControl.numberOfPages = [images count];
     
+    if(placeholderImage){
+        self.defaultImage = placeholderImage;
+    }
+    
     for(NSUInteger i=0; i<[images count]; i++){
         
         UIScrollView *scrollView = [[UIScrollView alloc] init];
@@ -193,22 +201,19 @@ static const CGFloat HeightCarousel = 24;
         }else if([object isKindOfClass:[NSURL class]]){
             
             NSURL *url = (NSURL *)object;
-            if(placeholderImage){
-                [self.images insertObject:placeholderImage atIndex:i];
-            }else{
-                [self.images insertObject:self.defaultImage atIndex:i];
-            }
+            [self.images insertObject:self.defaultImage atIndex:i];
             
             [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 
-                [SVProgressHUD show];
-                
             } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                
                 [SVProgressHUD dismiss];
                 
-                [self.images replaceObjectAtIndex:i withObject:image];
-                imageView.image = image;
-                [self setNeedsLayout];
+                if(image){
+                    [self.images replaceObjectAtIndex:i withObject:image];
+                    imageView.image = image;
+                    [self setNeedsLayout];
+                }
             }];
         
         }else {
@@ -373,6 +378,14 @@ static const CGFloat HeightCarousel = 24;
         NSInteger newImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
         
         if(newImageIndex != self.currentPageIndex){
+            
+            UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:newImageIndex];
+            if([imageView.image isEqual:self.defaultImage] && ![SVProgressHUD isVisible]){
+                [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeNone];
+            }else{
+                [SVProgressHUD dismiss];
+            }
+            
             if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didImageSwitchFrom:to:)]){
                 [self.delegate imageViewer:self didImageSwitchFrom:self.currentPageIndex to:newImageIndex];
             }

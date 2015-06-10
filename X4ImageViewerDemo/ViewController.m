@@ -37,18 +37,35 @@
                             ];
     
     NSArray *imageArray2 = @[
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
                          [UIImage imageNamed:@"1.jpg"]
                          ];
     
     NSArray *imageArray3 = @[
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
                          [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
                          [UIImage imageNamed:@"1.jpg"],
                          [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
                          [UIImage imageNamed:@"6.jpg"],
                          [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
                          [UIImage imageNamed:@"5.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"]
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
+                             [UIImage imageNamed:@"1.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
+                             [UIImage imageNamed:@"6.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
+                             [UIImage imageNamed:@"5.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
+                             [UIImage imageNamed:@"1.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
+                             [UIImage imageNamed:@"6.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
+                             [UIImage imageNamed:@"5.jpg"],
+                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"]
                          ];
 
     
@@ -67,7 +84,7 @@
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
-    [iv setImages:imageArray2 withPlaceholder:nil];
+    [iv setImages:imageArray3 withPlaceholder:nil];
     
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];
