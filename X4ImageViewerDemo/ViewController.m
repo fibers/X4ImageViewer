@@ -45,11 +45,11 @@
     iv.images = self.imageArray1;
     iv.currentPageIndex = 3;
     iv.carouselCenter = CGPointMake(160, 380);
-    iv.carouselType = CarouselTypePageNumber;
+    iv.carouselType = CarouselTypePageNone;
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
 
-//    [self.view addSubview:iv];
+    [self.view addSubview:iv];
     
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
@@ -63,7 +63,7 @@
     UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture1:)];
     [imageView addGestureRecognizer:tapGesture1];
     
-    [self.view addSubview:imageView];
+//    [self.view addSubview:imageView];
     
 
     

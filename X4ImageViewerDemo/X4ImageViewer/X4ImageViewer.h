@@ -11,7 +11,8 @@
 
 typedef NS_ENUM(NSInteger, CarouselType){
     CarouselTypePageControl = 0,
-    CarouselTypePageNumber
+    CarouselTypePageNumber,
+    CarouselTypePageNone
 };
 
 @class X4ImageViewer;

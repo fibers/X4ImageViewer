@@ -187,15 +187,21 @@ static const CGFloat HeightCarousel = 24;
     
     _carouselType = carouselType;
     
-    if(self.carouselType == CarouselTypePageControl){
-        self.pageControl.hidden = NO;
-        self.pageNumber.hidden = YES;
-    }else if(self.carouselType == CarouselTypePageNumber){
-        self.pageControl.hidden = YES;
-        self.pageNumber.hidden = NO;
-    }else{
-        self.pageControl.hidden = NO;
-        self.pageNumber.hidden = YES;
+    switch (self.carouselType) {
+        case CarouselTypePageControl:
+            self.pageControl.hidden = NO;
+            self.pageNumber.hidden = YES;
+            break;
+        case CarouselTypePageNumber:
+            self.pageControl.hidden = YES;
+            self.pageNumber.hidden = NO;
+            break;
+        case CarouselTypePageNone:
+            self.pageControl.hidden = YES;
+            self.pageNumber.hidden = YES;
+            break;
+        default:
+            break;
     }
 }
 
