@@ -10,6 +10,6 @@
 
 @interface UIImage (SolidColor)
 
-+ (UIImage *)imageWithColor:(UIColor *)color;
++ (UIImage *)imageWithSolidColor:(UIColor *)color;
 
 @end
