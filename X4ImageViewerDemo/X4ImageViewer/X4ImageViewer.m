@@ -7,11 +7,14 @@
 //
 
 #import "X4ImageViewer.h"
+#import <UIImageView+WebCache.h>
+#import "UIImage+SolidColor.h"
 
 static const CGFloat HeightCarousel = 24;
 
 @interface X4ImageViewer ()
 
+@property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic, strong) NSMutableArray *imageViews;
 @property (nonatomic, strong) NSMutableArray *innerScrollViews;
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -21,6 +24,8 @@ static const CGFloat HeightCarousel = 24;
 
 @property (nonatomic, assign) CGFloat carouselXRatio;
 @property (nonatomic, assign) CGFloat carouselYRatio;
+
+@property (nonatomic, strong) UIImage *defaultImage;
 
 @end
 
@@ -39,6 +44,7 @@ static const CGFloat HeightCarousel = 24;
         _carouselType = CarouselTypePageControl;
         _bZoomEnable = YES;
         _bZoomRestoreAfterDimissed = YES;
+        _defaultImage = [UIImage imageWithColor:[UIColor blackColor]];
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         _scrollView.delegate = self;
@@ -82,8 +88,9 @@ static const CGFloat HeightCarousel = 24;
         _pageNumber.hidden = YES;
         [self addSubview:_pageNumber];
         
-        _imageViews = [[NSMutableArray alloc] init];
-        _innerScrollViews = [[NSMutableArray alloc] init];
+        _images = [NSMutableArray array];
+        _imageViews = [NSMutableArray array];
+        _innerScrollViews = [NSMutableArray array];
         
         return self;
     }
@@ -110,10 +117,14 @@ static const CGFloat HeightCarousel = 24;
     
     for(NSUInteger i=0; i<[self.images count]; i++){
         
-        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:i];
+        UIImage *image = (UIImage *)[self.images objectAtIndex:i];
         UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:i];
+        UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:i];
+
+        imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
         
         scrollView.frame = CGRectMake(i * self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+        scrollView.contentSize = imageView.bounds.size;
         
         CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
         CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
@@ -147,36 +158,59 @@ static const CGFloat HeightCarousel = 24;
 
 }
 
-- (void)setImages:(NSArray *)images{
+- (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage{
 
     [self removeAllImages];
     
+    [self.images removeAllObjects];
     [self.imageViews removeAllObjects];
     [self.innerScrollViews removeAllObjects];
     
-    _images = images;
+    self.pageControl.numberOfPages = [images count];
     
-    self.pageControl.numberOfPages = [self.images count];
-    
-    for(NSUInteger i=0; i<[self.images count]; i++){
-
-        UIImage *image = [images objectAtIndex:i];
-
-        UIScrollView *scrollView = [[UIScrollView alloc] init];
+    for(NSUInteger i=0; i<[images count]; i++){
         
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
-
-        [scrollView addSubview:imageView];
-        [self.imageViews addObject:imageView];
-
+        UIScrollView *scrollView = [[UIScrollView alloc] init];
         scrollView.delegate = self;
-        scrollView.contentSize = imageView.bounds.size;
         scrollView.pagingEnabled = NO;
         scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
         scrollView.tag = i;
+        
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [scrollView addSubview:imageView];
 
+        NSObject *object = [images objectAtIndex:i];
+        
+        if([object isKindOfClass:[UIImage class]]){
+            
+            UIImage *image = (UIImage *)object;
+            [self.images insertObject:image atIndex:i];
+            
+        }else if([object isKindOfClass:[NSURL class]]){
+            
+            NSURL *url = (NSURL *)object;
+            if(placeholderImage){
+                [self.images insertObject:placeholderImage atIndex:i];
+            }else{
+                [self.images insertObject:self.defaultImage atIndex:i];
+            }
+            
+            [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                
+            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                [self.images replaceObjectAtIndex:i withObject:image];
+                imageView.image = image;
+                [self setNeedsLayout];
+            }];
+        
+        }else {
+            NSAssert(NO, @"Unsupport type of images! Only `NSURL` or `UIImage` will be accepted.");
+        }
+        
+        [self.imageViews addObject:imageView];
         [self.innerScrollViews addObject:scrollView];
+        
     }
     
     [self setNeedsLayout];

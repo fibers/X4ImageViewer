@@ -14,7 +14,8 @@
 @interface ViewController ()
 
 @property (nonatomic, strong) NSArray *imageArray1;
-@property (nonatomic, strong) NSArray *imageArray2;
+@property (nonatomic, strong) UIImage *placeholderImage;
+
 
 @end
 
@@ -30,11 +31,31 @@
                             [UIImage imageNamed:@"6.jpg"]
                             ];
     
-    self.imageArray2 = @[
+    NSArray *imageArray1 = @[
                             [UIImage imageNamed:@"4.jpg"],
                             [UIImage imageNamed:@"5.jpg"]
                             ];
+    
+    NSArray *imageArray2 = @[
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"]
+                         ];
+    
+    NSArray *imageArray3 = @[
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
+                         [UIImage imageNamed:@"1.jpg"],
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
+                         [UIImage imageNamed:@"6.jpg"],
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
+                         [UIImage imageNamed:@"5.jpg"],
+                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"]
+                         ];
 
+    
+    
+    self.placeholderImage = [UIImage imageNamed:@"3.jpg"];
     
     self.view.backgroundColor = [UIColor greenColor];
     
@@ -42,12 +63,13 @@
     
     X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,60,320,400)];
     iv.delegate = self;
-    iv.images = self.imageArray1;
-    iv.currentPageIndex = 3;
+//    iv.currentPageIndex = 3;
     iv.carouselCenter = CGPointMake(160, 380);
     iv.carouselType = CarouselTypePageControl;
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
+    
+    [iv setImages:imageArray3 withPlaceholder:nil];
     
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];

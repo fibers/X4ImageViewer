@@ -36,11 +36,11 @@ typedef NS_ENUM(NSInteger, CarouselType){
 @property (nonatomic, assign) CGPoint carouselCenter;
 @property (nonatomic, assign) CarouselType carouselType;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
-@property (nonatomic, strong) NSArray *images;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithFrame:(CGRect)frame;
 
+- (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)image;
 - (void)setPageControlIndicatorImage:(UIImage *)indicatorImage;
 - (void)setPageControlCurrentIndicatorImage:(UIImage *)currentIndicatorImage;
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		370E51E41B27F94B00DF12F5 /* UIImage+SolidColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 370E51E31B27F94B00DF12F5 /* UIImage+SolidColor.m */; };
 		378BED981B1441BD00010F90 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED971B1441BD00010F90 /* main.m */; };
 		378BED9B1B1441BD00010F90 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED9A1B1441BD00010F90 /* AppDelegate.m */; };
 		378BED9E1B1441BD00010F90 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED9D1B1441BD00010F90 /* ViewController.m */; };
@@ -36,6 +37,8 @@
 
 /* Begin PBXFileReference section */
 		27E6A7F681E7C8B1B3E19692 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		370E51E21B27F94B00DF12F5 /* UIImage+SolidColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SolidColor.h"; sourceTree = "<group>"; };
+		370E51E31B27F94B00DF12F5 /* UIImage+SolidColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SolidColor.m"; sourceTree = "<group>"; };
 		378BED921B1441BD00010F90 /* X4ImageViewerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = X4ImageViewerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		378BED961B1441BD00010F90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		378BED971B1441BD00010F90 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -153,6 +156,8 @@
 			children = (
 				378BEDBC1B1441EB00010F90 /* X4ImageViewer.h */,
 				378BEDBD1B1441EB00010F90 /* X4ImageViewer.m */,
+				370E51E21B27F94B00DF12F5 /* UIImage+SolidColor.h */,
+				370E51E31B27F94B00DF12F5 /* UIImage+SolidColor.m */,
 				37B7B8531B24952500DA4371 /* UIImageView+ClickToFullScreen.h */,
 				37B7B8541B24952500DA4371 /* UIImageView+ClickToFullScreen.m */,
 			);
@@ -317,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				378BED9E1B1441BD00010F90 /* ViewController.m in Sources */,
+				370E51E41B27F94B00DF12F5 /* UIImage+SolidColor.m in Sources */,
 				378BED9B1B1441BD00010F90 /* AppDelegate.m in Sources */,
 				378BED981B1441BD00010F90 /* main.m in Sources */,
 				378BEDBE1B1441EB00010F90 /* X4ImageViewer.m in Sources */,
