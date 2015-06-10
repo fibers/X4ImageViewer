@@ -13,7 +13,7 @@
 
 @interface ViewController ()
 
-@property (nonatomic, strong) NSArray *imageArray1;
+@property (nonatomic, strong) NSArray *imageArray;
 @property (nonatomic, strong) UIImage *placeholderImage;
 
 
@@ -25,7 +25,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.imageArray1 = @[
+    self.imageArray = @[
                             [UIImage imageNamed:@"1.jpg"],
                             [UIImage imageNamed:@"2.jpg"],
                             [UIImage imageNamed:@"6.jpg"]
@@ -38,9 +38,7 @@
     
     NSArray *imageArray2 = @[
                          [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"]
+                         [UIImage imageNamed:@"1.jpg"]
                          ];
     
     NSArray *imageArray3 = @[
@@ -69,7 +67,7 @@
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
-    [iv setImages:imageArray3 withPlaceholder:nil];
+    [iv setImages:imageArray2 withPlaceholder:nil];
     
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];

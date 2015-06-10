@@ -123,6 +123,8 @@ static const CGFloat HeightCarousel = 24;
         UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:i];
 
         imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+        imageView.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
+        imageView.transform = CGAffineTransformIdentity;
         
         scrollView.frame = CGRectMake(i * self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
         scrollView.contentSize = imageView.bounds.size;

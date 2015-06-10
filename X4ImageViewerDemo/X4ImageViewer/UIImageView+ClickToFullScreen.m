@@ -58,8 +58,8 @@ static const NSUInteger TagImageView = 1000;
         
         imageView.frame = CGRectMake(0, 0, self.image.size.width, self.image.size.height);
         
-        CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
-        CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
+        CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / self.image.size.width;
+        CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / self.image.size.height;
         CGFloat minScale = MIN(scaleWidth, scaleHeight);
         CGFloat maxScale = MAX(scaleWidth, scaleHeight);
         
