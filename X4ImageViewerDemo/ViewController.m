@@ -56,11 +56,26 @@
     
     imageView.image = [UIImage imageNamed:@"6.jpg"];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
-    
-    [self.view addSubview:imageView];
+    imageView.userInteractionEnabled = YES;
     
     [imageView enableClickToFullScreen];
     
+    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture1:)];
+    [imageView addGestureRecognizer:tapGesture1];
+    
+    [self.view addSubview:imageView];
+    
+
+    
+}
+
+
+- (void)onTapGesture1:(UITapGestureRecognizer *)gesture{
+    NSLog(@"tap gesture 1");
+}
+
+- (void)onTapGesture2:(UITapGestureRecognizer *)gesture{
+    NSLog(@"tap gesture 2");
 }
 
 

@@ -16,6 +16,7 @@ static const NSUInteger TagImageView = 1000;
     
     self.userInteractionEnabled = YES;
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapToFullScreen:)];
+    tapGesture.delegate = self;
     [self addGestureRecognizer:tapGesture];
 }
 
@@ -101,6 +102,11 @@ static const NSUInteger TagImageView = 1000;
     }];
 
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
+}
+
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
     

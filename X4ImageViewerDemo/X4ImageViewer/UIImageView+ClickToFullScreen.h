@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIImageView (ClickToFullScreen) <UIScrollViewDelegate>
+@interface UIImageView (ClickToFullScreen) <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
 - (void)enableClickToFullScreen;
 
