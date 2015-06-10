@@ -44,7 +44,7 @@ static const CGFloat HeightCarousel = 24;
         _carouselType = CarouselTypePageControl;
         _bZoomEnable = YES;
         _bZoomRestoreAfterDimissed = YES;
-        _defaultImage = [UIImage imageWithColor:[UIColor blackColor]];
+        _defaultImage = [UIImage imageWithSolidColor:[UIColor blackColor]];
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         _scrollView.delegate = self;
