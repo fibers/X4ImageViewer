@@ -9,6 +9,7 @@
 #import "X4ImageViewer.h"
 #import <UIImageView+WebCache.h>
 #import "UIImage+SolidColor.h"
+#import <SVProgressHUD.h>
 
 static const CGFloat HeightCarousel = 24;
 
@@ -198,7 +199,11 @@ static const CGFloat HeightCarousel = 24;
             
             [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 
+                [SVProgressHUD show];
+                
             } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                [SVProgressHUD dismiss];
+                
                 [self.images replaceObjectAtIndex:i withObject:image];
                 imageView.image = image;
                 [self setNeedsLayout];
