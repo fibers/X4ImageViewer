@@ -78,7 +78,7 @@
     
     X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,60,320,400)];
     iv.delegate = self;
-//    iv.currentPageIndex = 3;
+    iv.currentPageIndex = 3;
     iv.carouselCenter = CGPointMake(160, 380);
     iv.carouselType = CarouselTypePageControl;
     iv.bZoomEnable = YES;
@@ -110,13 +110,6 @@
 }
 
 
-- (void)onTapGesture1:(UITapGestureRecognizer *)gesture{
-    NSLog(@"tap gesture 1");
-}
-
-- (void)onTapGesture2:(UITapGestureRecognizer *)gesture{
-    NSLog(@"tap gesture 2");
-}
 
 
 - (void)didReceiveMemoryWarning {
@@ -143,5 +136,6 @@
 //    imageViewer.frame = CGRectMake(20, 20, 200, 200);
 //    imageViewer.images = self.imageArray2;
 }
+
 
 @end

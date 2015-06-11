@@ -9,7 +9,6 @@
 #import "X4ImageViewer.h"
 #import <UIImageView+WebCache.h>
 #import "UIImage+SolidColor.h"
-#import <SVProgressHUD.h>
 
 static const CGFloat HeightCarousel = 24;
 
@@ -40,9 +39,6 @@ static const CGFloat HeightCarousel = 24;
     if(self){
         
         self.backgroundColor = [UIColor blackColor];
-        
-        [SVProgressHUD setBackgroundColor:[UIColor blackColor]];
-        [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     
         _currentPageIndex = 0;
         _carouselType = CarouselTypePageControl;
@@ -205,15 +201,30 @@ static const CGFloat HeightCarousel = 24;
             
             [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 
+                if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingInProcess:withProcess:atIndex:inScrollView:)]){
+                    [self.delegate imageViewer:self loadingInProcess:imageView withProcess:(CGFloat)receivedSize/expectedSize atIndex:i inScrollView:scrollView];
+                }
+                
             } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
                 
-                [SVProgressHUD dismiss];
-                
-                if(image){
-                    [self.images replaceObjectAtIndex:i withObject:image];
-                    imageView.image = image;
-                    [self setNeedsLayout];
+                if(error){
+                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingFailed:withError:atIndex:inScrollView:)]){
+                        [self.delegate imageViewer:self loadingFailed:imageView withError:error atIndex:i inScrollView:scrollView];
+                    }
+                }else{
+                    if(image){
+                        [self.images replaceObjectAtIndex:i withObject:image];
+                        imageView.image = image;
+                        [self setNeedsLayout];
+                    }
+                    
+                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:inScrollView:)]){
+                        [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i inScrollView:scrollView];
+                    }
                 }
+                
+                
+                
             }];
         
         }else {
@@ -378,14 +389,6 @@ static const CGFloat HeightCarousel = 24;
         NSInteger newImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
         
         if(newImageIndex != self.currentPageIndex){
-            
-            UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:newImageIndex];
-            if([imageView.image isEqual:self.defaultImage] && ![SVProgressHUD isVisible]){
-                [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeNone];
-            }else{
-                [SVProgressHUD dismiss];
-            }
-            
             if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didImageSwitchFrom:to:)]){
                 [self.delegate imageViewer:self didImageSwitchFrom:self.currentPageIndex to:newImageIndex];
             }

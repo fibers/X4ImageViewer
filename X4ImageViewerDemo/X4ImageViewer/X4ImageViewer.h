@@ -24,6 +24,10 @@ typedef NS_ENUM(NSInteger, CarouselType){
 - (void)imageViewer:(X4ImageViewer *)imageViewer didImageSwitchFrom:(NSInteger)oldIndex to:(NSInteger)newIndex;
 - (void)imageViewer:(X4ImageViewer *)imageViewer didEndZoomingWith:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
 
+- (void)imageViewer:(X4ImageViewer *)imageViewer loadingInProcess:(UIImageView *)imageView withProcess:(CGFloat)process atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
+- (void)imageViewer:(X4ImageViewer *)imageViewer loadingSuccess:(UIImageView *)imageView withImage:(UIImage *)image atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
+- (void)imageViewer:(X4ImageViewer *)imageViewer loadingFailed:(UIImageView *)imageView withError:(NSError *)error atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
+
 @end
 
 
