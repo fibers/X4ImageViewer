@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, CarouselType){
 - (void)imageViewer:(X4ImageViewer *)imageViewer didSingleTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
 - (void)imageViewer:(X4ImageViewer *)imageViewer didDoubleTap:(UIImageView *)imageView atIndex:(NSInteger)index
  inScrollView:(UIScrollView *)scrollView;
-- (void)imageViewer:(X4ImageViewer *)imageViewer didSlideFrom:(UIImageView *)fromImageView fromIndex:(NSInteger)fromIndex to:(UIImageView *)imageView toIndex:(NSInteger)toIndex;
+- (void)imageViewer:(X4ImageViewer *)imageViewer didSlideFrom:(UIImageView *)fromImageView fromIndex:(NSInteger)fromIndex to:(UIImageView *)toImageView toIndex:(NSInteger)toIndex;
 - (void)imageViewer:(X4ImageViewer *)imageViewer didEndZoomingWith:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;;
 
 - (void)imageViewer:(X4ImageViewer *)imageViewer loadingInProcess:(UIImageView *)imageView withProcess:(CGFloat)process atIndex:(NSInteger)index;
@@ -48,6 +48,8 @@ typedef NS_ENUM(NSInteger, CarouselType){
 - (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)image;
 - (void)setPageControlIndicatorImage:(UIImage *)indicatorImage;
 - (void)setPageControlCurrentIndicatorImage:(UIImage *)currentIndicatorImage;
+
+
 
 
 @end
