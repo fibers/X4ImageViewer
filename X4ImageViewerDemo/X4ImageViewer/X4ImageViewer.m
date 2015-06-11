@@ -97,7 +97,6 @@ static const CGFloat HeightCarousel = 24;
     return nil;
 }
 
-
 - (void)layoutSubviews{
     
     _currentPageIndex = self.currentPageIndex < [self.images count] ? self.currentPageIndex : 0;
@@ -201,29 +200,27 @@ static const CGFloat HeightCarousel = 24;
             
             [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 
-                if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingInProcess:withProcess:atIndex:inScrollView:)]){
-                    [self.delegate imageViewer:self loadingInProcess:imageView withProcess:(CGFloat)receivedSize/expectedSize atIndex:i inScrollView:scrollView];
+                if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingInProcess:withProcess:atIndex:)]){
+                    [self.delegate imageViewer:self loadingInProcess:imageView withProcess:(CGFloat)receivedSize/expectedSize atIndex:i];
                 }
                 
             } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
                 
                 if(error){
-                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingFailed:withError:atIndex:inScrollView:)]){
-                        [self.delegate imageViewer:self loadingFailed:imageView withError:error atIndex:i inScrollView:scrollView];
+                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingFailed:withError:atIndex:)]){
+                        [self.delegate imageViewer:self loadingFailed:imageView withError:error atIndex:i];
                     }
                 }else{
-                    if(image){
+                    if(image && finished){
                         [self.images replaceObjectAtIndex:i withObject:image];
                         imageView.image = image;
                         [self setNeedsLayout];
-                    }
-                    
-                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:inScrollView:)]){
-                        [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i inScrollView:scrollView];
+                        
+                        if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:)]){
+                            [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i];
+                        }
                     }
                 }
-                
-                
                 
             }];
         
@@ -389,8 +386,12 @@ static const CGFloat HeightCarousel = 24;
         NSInteger newImageIndex = (NSInteger)floor((scrollView.contentOffset.x * 2 + scrollView.frame.size.width) / (scrollView.frame.size.width * 2));
         
         if(newImageIndex != self.currentPageIndex){
-            if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didImageSwitchFrom:to:)]){
-                [self.delegate imageViewer:self didImageSwitchFrom:self.currentPageIndex to:newImageIndex];
+            
+            UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentPageIndex];
+            UIImageView *newImageView = (UIImageView *)[self.imageViews objectAtIndex:newImageIndex];
+            
+            if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didSlideFrom:fromIndex:to:toIndex:)]){
+                [self.delegate imageViewer:self didSlideFrom:imageView fromIndex:self.currentPageIndex to:newImageView toIndex:newImageIndex];
             }
         }
         _currentPageIndex = newImageIndex;
@@ -460,12 +461,12 @@ static const CGFloat HeightCarousel = 24;
 
 - (void)onTappedScrollView:(UITapGestureRecognizer *)gesture{
     
-    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didTap:atIndex:inScrollView:)]){
+    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:didSingleTap:atIndex:inScrollView:)]){
         
         UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:self.currentPageIndex];
         UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentPageIndex];
         
-        [self.delegate imageViewer:self didTap:imageView atIndex:self.currentPageIndex inScrollView:scrollView];
+        [self.delegate imageViewer:self didSingleTap:imageView atIndex:self.currentPageIndex inScrollView:scrollView];
     }
 }
 
