@@ -81,10 +81,11 @@
     iv.currentPageIndex = 3;
     iv.carouselCenter = CGPointMake(160, 380);
     iv.carouselType = CarouselTypePageControl;
+    iv.contentMode = ContentModeAspectFill;
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
-    [iv setImages:imageArray3 withPlaceholder:nil];
+    [iv setImages:self.imageArray withPlaceholder:nil];
     
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];

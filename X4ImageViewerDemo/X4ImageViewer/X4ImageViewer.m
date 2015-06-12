@@ -17,6 +17,7 @@ static const CGFloat HeightCarousel = 24;
 @property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic, strong) NSMutableArray *imageViews;
 @property (nonatomic, strong) NSMutableArray *innerScrollViews;
+@property (nonatomic, strong) NSMutableArray *defaultScale;
 @property (nonatomic, strong) UIScrollView *scrollView;
 
 @property (nonatomic, strong) SMPageControl *pageControl;
@@ -45,6 +46,7 @@ static const CGFloat HeightCarousel = 24;
         _bZoomEnable = YES;
         _bZoomRestoreAfterDimissed = YES;
         _defaultImage = [UIImage imageWithSolidColor:[UIColor blackColor]];
+        _contentMode = ContentModeAspectFit;
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         _scrollView.delegate = self;
@@ -91,6 +93,7 @@ static const CGFloat HeightCarousel = 24;
         _images = [NSMutableArray array];
         _imageViews = [NSMutableArray array];
         _innerScrollViews = [NSMutableArray array];
+        _defaultScale = [NSMutableArray array];
         
         return self;
     }
@@ -106,11 +109,13 @@ static const CGFloat HeightCarousel = 24;
     self.scrollView.contentOffset = CGPointMake(self.currentPageIndex * self.scrollView.bounds.size.width, 0);
     
     CGPoint carouselCenter = CGPointMake(self.bounds.size.width * self.carouselXRatio, self.bounds.size.height * self.carouselYRatio);
+    
     CGRect boundsPageControl = self.pageControl.bounds;
     boundsPageControl.size.width = self.bounds.size.width;
     self.pageControl.bounds = boundsPageControl;
+    
     CGPoint centerPageControl = self.pageControl.center;
-    centerPageControl.y = self.carouselCenter.y;
+    centerPageControl.y = carouselCenter.y;
     self.pageControl.center = centerPageControl;
     
     self.pageNumber.center = carouselCenter;
@@ -127,32 +132,37 @@ static const CGFloat HeightCarousel = 24;
         
         scrollView.frame = CGRectMake(i * self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
         scrollView.contentSize = imageView.bounds.size;
+        scrollView.contentOffset = CGPointMake(0,0);
         
         CGFloat scaleWidth = (CGFloat)scrollView.bounds.size.width / imageView.bounds.size.width;
         CGFloat scaleHeight = (CGFloat)scrollView.bounds.size.height / imageView.bounds.size.height;
+        
         CGFloat minScale = MIN(scaleWidth, scaleHeight);
         CGFloat maxScale = MAX(scaleWidth, scaleHeight);
         
-        if(minScale >= 1){
-            
-            scrollView.minimumZoomScale = 1;
-            if(self.bZoomEnable){
-                scrollView.maximumZoomScale = maxScale;
-            }else{
-                scrollView.maximumZoomScale = 1;
-            }
-            
+        scrollView.minimumZoomScale = MIN(minScale, 1);
+        if(self.bZoomEnable){
+            scrollView.maximumZoomScale = MAX(maxScale, 1);
         }else{
-            scrollView.minimumZoomScale = minScale;
-            if(self.bZoomEnable){
-                scrollView.maximumZoomScale = 1;
-            }else{
-                scrollView.maximumZoomScale = minScale;
-            }
+            scrollView.maximumZoomScale = scrollView.minimumZoomScale;
         }
         
-        scrollView.zoomScale = scrollView.minimumZoomScale;
+        switch (self.contentMode) {
+            case ContentModeAspectFit:
+                scrollView.zoomScale = minScale;
+                break;
+            case ContentModeAspectFill:
+                scrollView.zoomScale = maxScale;
+                break;
+            case ContentModeAspectCenter:
+                scrollView.zoomScale = 1;
+                break;
+            default:
+                scrollView.zoomScale = minScale;
+                break;
+        }
         
+        [self.defaultScale replaceObjectAtIndex:i withObject:@(scrollView.zoomScale)];
         [self move:imageView toCenterOf:scrollView];
     }
     
@@ -183,7 +193,6 @@ static const CGFloat HeightCarousel = 24;
         scrollView.tag = i;
         
         UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
         [scrollView addSubview:imageView];
 
         NSObject *object = [images objectAtIndex:i];
@@ -213,7 +222,8 @@ static const CGFloat HeightCarousel = 24;
                 }else{
                     if(image && finished){
                         [self.images replaceObjectAtIndex:i withObject:image];
-                        imageView.image = image;
+                        imageView.image = nil;
+                        [scrollView removeFromSuperview];
                         [self setNeedsLayout];
                         
                         if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:)]){
@@ -230,12 +240,18 @@ static const CGFloat HeightCarousel = 24;
         
         [self.imageViews addObject:imageView];
         [self.innerScrollViews addObject:scrollView];
+        [self.defaultScale addObject:@(1)];
         
     }
     
     [self setNeedsLayout];
 }
 
+- (void)setContentMode:(ContentMode)contentMode{
+    _contentMode = contentMode;
+    
+    [self setNeedsLayout];
+}
 
 - (void)setCarouselType:(CarouselType)carouselType{
     
@@ -261,10 +277,8 @@ static const CGFloat HeightCarousel = 24;
 
 - (void)setCarouselCenter:(CGPoint)carouselCenter{
     
-    _carouselCenter = carouselCenter;
-    
-    self.carouselXRatio = self.carouselCenter.x / self.bounds.size.width;
-    self.carouselYRatio = self.carouselCenter.y / self.bounds.size.height;
+    self.carouselXRatio = carouselCenter.x / self.bounds.size.width;
+    self.carouselYRatio = carouselCenter.y / self.bounds.size.height;
 
     [self setNeedsLayout];
 }
@@ -298,11 +312,10 @@ static const CGFloat HeightCarousel = 24;
     }
     
     UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
-    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
+    UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:index];
     
-    if(!ivImage.image){
-
-        ivImage.image = (UIImage *)[self.images objectAtIndex:index];
+    if(!imageView.image){
+        imageView.image = (UIImage *)[self.images objectAtIndex:index];
         [self.scrollView addSubview:scrollView];
     }
 }
@@ -315,10 +328,12 @@ static const CGFloat HeightCarousel = 24;
     }
     
     UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
-    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
+    UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:index];
+    CGFloat defaultScale = [[self.defaultScale objectAtIndex:index] doubleValue];
     
-    if(ivImage.image){
-        scrollView.zoomScale = scrollView.minimumZoomScale;
+    if(imageView.image){
+        scrollView.zoomScale = defaultScale;
+        [self move:imageView toCenterOf:scrollView];
     }
 }
 
@@ -331,11 +346,10 @@ static const CGFloat HeightCarousel = 24;
     }
 
     UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
-    UIImageView *ivImage = (UIImageView *)[self.imageViews objectAtIndex:index];
+    UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:index];
     
-    if(ivImage.image){
-        
-        ivImage.image = nil;
+    if(imageView.image){
+        imageView.image = nil;
         [scrollView removeFromSuperview];
     }
 }
@@ -484,6 +498,8 @@ static const CGFloat HeightCarousel = 24;
         }else{
             scrollView.zoomScale = scrollView.minimumZoomScale;
         }
+        
+        [self move:imageView toCenterOf:scrollView];
     }
 }
 
@@ -492,16 +508,33 @@ static const CGFloat HeightCarousel = 24;
     CGSize scrollViewSize = scrollView.bounds.size;
     CGRect imageFrame = imageView.frame;
     
-    if(imageFrame.size.width < scrollViewSize.width){
-        imageFrame.origin.x = (scrollViewSize.width - imageFrame.size.width) / 2;
-    } else {
-        imageFrame.origin.x = 0;
-    }
+    CGFloat differentWidth = imageFrame.size.width - scrollViewSize.width;
+    CGFloat differentHeight = imageFrame.size.height - scrollViewSize.height;
     
-    if(imageFrame.size.height < scrollViewSize.height){
-        imageFrame.origin.y = (scrollViewSize.height - imageFrame.size.height) / 2;
-    } else {
+    if(differentWidth >= 0 && differentHeight >= 0){
+        
+        imageFrame.origin.x = 0;
         imageFrame.origin.y = 0;
+        scrollView.contentOffset = CGPointMake(ABS(differentWidth) / 2, ABS(differentHeight) / 2);
+        
+    }else if(differentWidth >= 0 && differentHeight < 0){
+        
+        imageFrame.origin.x = 0;
+        imageFrame.origin.y = ABS(differentHeight) / 2;
+        scrollView.contentOffset = CGPointMake(ABS(differentWidth) / 2, 0);
+
+        
+    }else if(differentWidth < 0 && differentHeight >= 0){
+        
+        imageFrame.origin.x = ABS(differentWidth) / 2;
+        imageFrame.origin.y = 0;
+        scrollView.contentOffset = CGPointMake(0, ABS(differentHeight) / 2);
+
+    }else{
+        
+        imageFrame.origin.x = ABS(differentWidth) / 2;
+        imageFrame.origin.y = ABS(differentHeight) / 2;
+        scrollView.contentOffset = CGPointMake(0, 0);
     }
     
     imageView.frame = imageFrame;

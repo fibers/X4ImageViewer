@@ -15,6 +15,12 @@ typedef NS_ENUM(NSInteger, CarouselType){
     CarouselTypePageNone
 };
 
+typedef NS_ENUM(NSInteger, ContentMode){
+    ContentModeAspectFit = 0,
+    ContentModeAspectFill,
+    ContentModeAspectCenter
+};
+
 @class X4ImageViewer;
 @protocol X4ImageViewerDelegate <NSObject>
 
@@ -38,7 +44,7 @@ typedef NS_ENUM(NSInteger, CarouselType){
 @property (nonatomic, assign) BOOL bZoomEnable;
 @property (nonatomic, assign) BOOL bZoomRestoreAfterDimissed;
 @property (nonatomic, assign) NSInteger currentPageIndex;
-@property (nonatomic, assign) CGPoint carouselCenter;
+@property (nonatomic, assign) ContentMode contentMode;
 @property (nonatomic, assign) CarouselType carouselType;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
 
@@ -49,7 +55,7 @@ typedef NS_ENUM(NSInteger, CarouselType){
 - (void)setPageControlIndicatorImage:(UIImage *)indicatorImage;
 - (void)setPageControlCurrentIndicatorImage:(UIImage *)currentIndicatorImage;
 
-
+- (void)setCarouselCenter:(CGPoint)center;
 
 
 @end
