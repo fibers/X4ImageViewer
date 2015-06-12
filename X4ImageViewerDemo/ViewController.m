@@ -85,7 +85,7 @@
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
-    [iv setImages:self.imageArray withPlaceholder:nil];
+    [iv setImages:imageArray2 withPlaceholder:nil];
     
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];

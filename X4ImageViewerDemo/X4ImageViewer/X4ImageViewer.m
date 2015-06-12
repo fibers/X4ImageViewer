@@ -209,16 +209,16 @@ static const CGFloat HeightCarousel = 24;
             
             [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 
-                if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingInProcess:withProcess:atIndex:)]){
-                    [self.delegate imageViewer:self loadingInProcess:imageView withProcess:(CGFloat)receivedSize/expectedSize atIndex:i];
-                }
+//                if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingInProcess:withProcess:atIndex:)]){
+//                    [self.delegate imageViewer:self loadingInProcess:imageView withProcess:(CGFloat)receivedSize/expectedSize atIndex:i];
+//                }
                 
             } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
                 
                 if(error){
-                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingFailed:withError:atIndex:)]){
-                        [self.delegate imageViewer:self loadingFailed:imageView withError:error atIndex:i];
-                    }
+//                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingFailed:withError:atIndex:)]){
+//                        [self.delegate imageViewer:self loadingFailed:imageView withError:error atIndex:i];
+//                    }
                 }else{
                     if(image && finished){
                         [self.images replaceObjectAtIndex:i withObject:image];
@@ -226,9 +226,9 @@ static const CGFloat HeightCarousel = 24;
                         [scrollView removeFromSuperview];
                         [self setNeedsLayout];
                         
-                        if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:)]){
-                            [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i];
-                        }
+//                        if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:)]){
+//                            [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i];
+//                        }
                     }
                 }
                 
