@@ -93,7 +93,7 @@
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];
 
-    [self.view addSubview:iv];
+//    [self.view addSubview:iv];
     
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
@@ -110,6 +110,11 @@
 //    [self.view addSubview:imageView];
     
 
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(50,50, 200, 200)];
+    indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    
+    [self.view addSubview:indicatorView];
+    [indicatorView startAnimating];
     
 }
 

@@ -52,7 +52,8 @@ typedef NS_ENUM(NSInteger, ContentMode){
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithFrame:(CGRect)frame;
 
-- (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)image;
+- (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage;
+- (void)setImages:(NSArray *)images withPlaceholders:(NSArray *)placeholderImages;
 - (void)setPageControlIndicatorImage:(UIImage *)indicatorImage;
 - (void)setPageControlCurrentIndicatorImage:(UIImage *)currentIndicatorImage;
 

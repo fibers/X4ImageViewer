@@ -25,7 +25,8 @@ static const CGFloat HeightCarousel = 24;
 @property (nonatomic, assign) CGFloat carouselXRatio;
 @property (nonatomic, assign) CGFloat carouselYRatio;
 
-@property (nonatomic, strong) UIImage *defaultImage;
+@property (nonatomic, strong) UIImage *placeholderImage;
+@property (nonatomic, strong) NSArray *placeholderImages;
 
 @end
 
@@ -44,7 +45,7 @@ static const CGFloat HeightCarousel = 24;
         _carouselType = CarouselTypePageControl;
         _bZoomEnable = YES;
         _bZoomRestoreAfterDimissed = YES;
-        _defaultImage = [UIImage imageWithSolidColor:[UIColor blackColor]];
+        _placeholderImage = [UIImage imageWithSolidColor:[UIColor blackColor]];
         _contentMode = ContentModeAspectFit;
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
@@ -170,6 +171,11 @@ static const CGFloat HeightCarousel = 24;
 }
 
 - (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage{
+    
+    if(!images){
+        NSLog(@"[X4ImageViewer] Warning: images array is nil");
+        return;
+    }
 
     [self removeAllImages];
     
@@ -180,7 +186,7 @@ static const CGFloat HeightCarousel = 24;
     self.pageControl.numberOfPages = [images count];
     
     if(placeholderImage){
-        self.defaultImage = placeholderImage;
+        self.placeholderImage = placeholderImage;
     }
     
     for(NSUInteger i=0; i<[images count]; i++){
@@ -204,7 +210,7 @@ static const CGFloat HeightCarousel = 24;
         }else if([object isKindOfClass:[NSURL class]]){
             
             NSURL *url = (NSURL *)object;
-            [self.images insertObject:self.defaultImage atIndex:i];
+            [self.images insertObject:self.placeholderImage atIndex:i];
             
             [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 
@@ -234,6 +240,98 @@ static const CGFloat HeightCarousel = 24;
             }];
         
         }else {
+            NSLog(@"[X4ImageViewer] Warning: Unsupport type of images! Only `NSURL` or `UIImage` will be accepted.");
+            continue;
+        }
+        
+        [self.imageViews addObject:imageView];
+        [self.innerScrollViews addObject:scrollView];
+        
+    }
+    
+    [self setNeedsLayout];
+}
+
+- (void)setImages:(NSArray *)images withPlaceholders:(NSArray *)placeholderImages{
+    
+    if(!images){
+        NSLog(@"[X4ImageViewer] Warning: Images array is nil");
+        return;
+    }
+    
+    if(!placeholderImages){
+        NSLog(@"[X4ImageViewer] Warning: Placeholder images array is nil. Try to use setImages:withPlaceholder instead if you really don't want a placeholder image.");
+        return;
+    }
+
+    if([images count] != [placeholderImages count]){
+        NSLog(@"[X4ImageViewer] Warning: The number of the placeholder images is not match the number of images.");
+        return;
+    }
+
+    
+    [self removeAllImages];
+    
+    [self.images removeAllObjects];
+    [self.imageViews removeAllObjects];
+    [self.innerScrollViews removeAllObjects];
+    
+    self.pageControl.numberOfPages = [images count];
+    
+    self.placeholderImages = placeholderImages;
+    
+    for(NSUInteger i=0; i<[images count]; i++){
+        
+        UIScrollView *scrollView = [[UIScrollView alloc] init];
+        scrollView.delegate = self;
+        scrollView.pagingEnabled = NO;
+        scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
+        scrollView.tag = i;
+        
+        UIImageView *imageView = [[UIImageView alloc] init];
+        [scrollView addSubview:imageView];
+        
+        NSObject *object = [images objectAtIndex:i];
+        
+        if([object isKindOfClass:[UIImage class]]){
+            
+            UIImage *image = (UIImage *)object;
+            [self.images insertObject:image atIndex:i];
+            
+        }else if([object isKindOfClass:[NSURL class]]){
+            
+            NSURL *url = (NSURL *)object;
+            UIImage *placeholderImage = (UIImage *)[placeholderImages objectAtIndex:i];
+            [self.images insertObject:placeholderImage atIndex:i];
+            
+            [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                
+                //                if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingInProcess:withProcess:atIndex:)]){
+                //                    [self.delegate imageViewer:self loadingInProcess:imageView withProcess:(CGFloat)receivedSize/expectedSize atIndex:i];
+                //                }
+                
+            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                
+                if(error){
+                    //                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingFailed:withError:atIndex:)]){
+                    //                        [self.delegate imageViewer:self loadingFailed:imageView withError:error atIndex:i];
+                    //                    }
+                }else{
+                    if(image && finished){
+                        [self.images replaceObjectAtIndex:i withObject:image];
+                        imageView.image = nil;
+                        [scrollView removeFromSuperview];
+                        [self setNeedsLayout];
+                        
+                        //                        if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:)]){
+                        //                            [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i];
+                        //                        }
+                    }
+                }
+                
+            }];
+            
+        }else {
             NSAssert(NO, @"Unsupport type of images! Only `NSURL` or `UIImage` will be accepted.");
         }
         
@@ -244,6 +342,7 @@ static const CGFloat HeightCarousel = 24;
     
     [self setNeedsLayout];
 }
+
 
 - (void)setContentMode:(ContentMode)contentMode{
     _contentMode = contentMode;
