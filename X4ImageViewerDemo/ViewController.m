@@ -28,6 +28,9 @@
     self.imageArray = @[
                             [UIImage imageNamed:@"1.jpg"],
                             [UIImage imageNamed:@"2.jpg"],
+                            [UIImage imageNamed:@"3.jpg"],
+                            [UIImage imageNamed:@"4.jpg"],
+                            [UIImage imageNamed:@"5.jpg"],
                             [UIImage imageNamed:@"6.jpg"]
                             ];
     
@@ -85,7 +88,7 @@
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
-    [iv setImages:imageArray2 withPlaceholder:nil];
+    [iv setImages:self.imageArray withPlaceholder:nil];
     
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];

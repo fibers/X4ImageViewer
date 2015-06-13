@@ -16,9 +16,10 @@ typedef NS_ENUM(NSInteger, CarouselType){
 };
 
 typedef NS_ENUM(NSInteger, ContentMode){
-    ContentModeAspectFit = 0,
-    ContentModeAspectFill,
-    ContentModeAspectCenter
+    ContentModeAspectNormal = 0, // Images larger than the view will be treated as ContentModeAspectFit, and images smaller than the view will be show as the normal size.
+    ContentModeAspectFit,        // The same as UIViewContentModeScaleAspectFit, no matter the image is larger or smaller than the view
+    ContentModeAspectFill,       // The same as UIViewContentModeScaleAspectFill, no matter the image is larger or smaller than the view
+
 };
 
 @class X4ImageViewer;

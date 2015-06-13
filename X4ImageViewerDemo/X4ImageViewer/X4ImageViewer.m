@@ -17,7 +17,6 @@ static const CGFloat HeightCarousel = 24;
 @property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic, strong) NSMutableArray *imageViews;
 @property (nonatomic, strong) NSMutableArray *innerScrollViews;
-@property (nonatomic, strong) NSMutableArray *defaultScale;
 @property (nonatomic, strong) UIScrollView *scrollView;
 
 @property (nonatomic, strong) SMPageControl *pageControl;
@@ -93,7 +92,6 @@ static const CGFloat HeightCarousel = 24;
         _images = [NSMutableArray array];
         _imageViews = [NSMutableArray array];
         _innerScrollViews = [NSMutableArray array];
-        _defaultScale = [NSMutableArray array];
         
         return self;
     }
@@ -140,29 +138,30 @@ static const CGFloat HeightCarousel = 24;
         CGFloat minScale = MIN(scaleWidth, scaleHeight);
         CGFloat maxScale = MAX(scaleWidth, scaleHeight);
         
-        scrollView.minimumZoomScale = MIN(minScale, 1);
+        switch (self.contentMode) {
+            case ContentModeAspectNormal:
+                scrollView.minimumZoomScale = MIN(minScale, 1);
+                break;
+            case ContentModeAspectFit:
+                scrollView.minimumZoomScale = minScale;
+                break;
+            case ContentModeAspectFill:
+                scrollView.minimumZoomScale = maxScale;
+                break;
+            default:
+                scrollView.minimumZoomScale = MIN(minScale, 1);
+                break;
+        }
+        
         if(self.bZoomEnable){
+            scrollView.scrollEnabled = YES;
             scrollView.maximumZoomScale = MAX(maxScale, 1);
         }else{
+            scrollView.scrollEnabled = NO;
             scrollView.maximumZoomScale = scrollView.minimumZoomScale;
         }
         
-        switch (self.contentMode) {
-            case ContentModeAspectFit:
-                scrollView.zoomScale = minScale;
-                break;
-            case ContentModeAspectFill:
-                scrollView.zoomScale = maxScale;
-                break;
-            case ContentModeAspectCenter:
-                scrollView.zoomScale = 1;
-                break;
-            default:
-                scrollView.zoomScale = minScale;
-                break;
-        }
-        
-        [self.defaultScale replaceObjectAtIndex:i withObject:@(scrollView.zoomScale)];
+        scrollView.zoomScale = scrollView.minimumZoomScale;
         [self move:imageView toCenterOf:scrollView];
     }
     
@@ -240,7 +239,6 @@ static const CGFloat HeightCarousel = 24;
         
         [self.imageViews addObject:imageView];
         [self.innerScrollViews addObject:scrollView];
-        [self.defaultScale addObject:@(1)];
         
     }
     
@@ -329,10 +327,9 @@ static const CGFloat HeightCarousel = 24;
     
     UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:index];
     UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:index];
-    CGFloat defaultScale = [[self.defaultScale objectAtIndex:index] doubleValue];
     
     if(imageView.image){
-        scrollView.zoomScale = defaultScale;
+        scrollView.zoomScale = scrollView.minimumZoomScale;
         [self move:imageView toCenterOf:scrollView];
     }
 }
@@ -421,7 +418,7 @@ static const CGFloat HeightCarousel = 24;
         
         [self move:imageView toCenterOf:scrollView];
         
-        if(scrollView.minimumZoomScale == scrollView.zoomScale){
+        if(!self.bZoomEnable || scrollView.minimumZoomScale == scrollView.zoomScale){
             scrollView.scrollEnabled = NO;
         }else{
             scrollView.scrollEnabled = YES;
