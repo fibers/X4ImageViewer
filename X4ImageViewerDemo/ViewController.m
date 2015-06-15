@@ -110,11 +110,18 @@
 //    [self.view addSubview:imageView];
     
 
-    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(50,50, 200, 200)];
-    indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActionSheetStyleDefault];
+//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActionSheetStyleBlackOpaque];
+//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActionSheetStyleBlackTranslucent];
+
     
-    [self.view addSubview:indicatorView];
-    [indicatorView startAnimating];
+    spinner.frame = CGRectMake(50,50, 200, 200);
+    
+    [self.view addSubview:spinner];
+    [spinner startAnimating];
     
 }
 
