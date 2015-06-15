@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		370E52561B2EC6ED00DF12F5 /* UIImage+SolidColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 370E52511B2EC6ED00DF12F5 /* UIImage+SolidColor.m */; };
-		370E52571B2EC6ED00DF12F5 /* UIImageView+ClickToFullScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 370E52531B2EC6ED00DF12F5 /* UIImageView+ClickToFullScreen.m */; };
-		370E52581B2EC6ED00DF12F5 /* X4ImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 370E52551B2EC6ED00DF12F5 /* X4ImageViewer.m */; };
+		3740A2331B2EE0E2005F7CFB /* UIImage+SolidColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3740A22E1B2EE0E2005F7CFB /* UIImage+SolidColor.m */; };
+		3740A2341B2EE0E2005F7CFB /* UIImageView+ClickToFullScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 3740A2301B2EE0E2005F7CFB /* UIImageView+ClickToFullScreen.m */; };
+		3740A2351B2EE0E2005F7CFB /* X4ImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3740A2321B2EE0E2005F7CFB /* X4ImageViewer.m */; };
 		378BED981B1441BD00010F90 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED971B1441BD00010F90 /* main.m */; };
 		378BED9B1B1441BD00010F90 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED9A1B1441BD00010F90 /* AppDelegate.m */; };
 		378BED9E1B1441BD00010F90 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BED9D1B1441BD00010F90 /* ViewController.m */; };
@@ -37,12 +37,12 @@
 
 /* Begin PBXFileReference section */
 		27E6A7F681E7C8B1B3E19692 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		370E52501B2EC6ED00DF12F5 /* UIImage+SolidColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SolidColor.h"; sourceTree = "<group>"; };
-		370E52511B2EC6ED00DF12F5 /* UIImage+SolidColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SolidColor.m"; sourceTree = "<group>"; };
-		370E52521B2EC6ED00DF12F5 /* UIImageView+ClickToFullScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+ClickToFullScreen.h"; sourceTree = "<group>"; };
-		370E52531B2EC6ED00DF12F5 /* UIImageView+ClickToFullScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+ClickToFullScreen.m"; sourceTree = "<group>"; };
-		370E52541B2EC6ED00DF12F5 /* X4ImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X4ImageViewer.h; sourceTree = "<group>"; };
-		370E52551B2EC6ED00DF12F5 /* X4ImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = X4ImageViewer.m; sourceTree = "<group>"; };
+		3740A22D1B2EE0E2005F7CFB /* UIImage+SolidColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+SolidColor.h"; path = "X4ImageViewer/UIImage+SolidColor.h"; sourceTree = SOURCE_ROOT; };
+		3740A22E1B2EE0E2005F7CFB /* UIImage+SolidColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+SolidColor.m"; path = "X4ImageViewer/UIImage+SolidColor.m"; sourceTree = SOURCE_ROOT; };
+		3740A22F1B2EE0E2005F7CFB /* UIImageView+ClickToFullScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+ClickToFullScreen.h"; path = "X4ImageViewer/UIImageView+ClickToFullScreen.h"; sourceTree = SOURCE_ROOT; };
+		3740A2301B2EE0E2005F7CFB /* UIImageView+ClickToFullScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+ClickToFullScreen.m"; path = "X4ImageViewer/UIImageView+ClickToFullScreen.m"; sourceTree = SOURCE_ROOT; };
+		3740A2311B2EE0E2005F7CFB /* X4ImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = X4ImageViewer.h; path = X4ImageViewer/X4ImageViewer.h; sourceTree = SOURCE_ROOT; };
+		3740A2321B2EE0E2005F7CFB /* X4ImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = X4ImageViewer.m; path = X4ImageViewer/X4ImageViewer.m; sourceTree = SOURCE_ROOT; };
 		378BED921B1441BD00010F90 /* X4ImageViewerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = X4ImageViewerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		378BED961B1441BD00010F90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		378BED971B1441BD00010F90 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -87,12 +87,12 @@
 		370E524F1B2EC6ED00DF12F5 /* X4ImageViewer */ = {
 			isa = PBXGroup;
 			children = (
-				370E52501B2EC6ED00DF12F5 /* UIImage+SolidColor.h */,
-				370E52511B2EC6ED00DF12F5 /* UIImage+SolidColor.m */,
-				370E52521B2EC6ED00DF12F5 /* UIImageView+ClickToFullScreen.h */,
-				370E52531B2EC6ED00DF12F5 /* UIImageView+ClickToFullScreen.m */,
-				370E52541B2EC6ED00DF12F5 /* X4ImageViewer.h */,
-				370E52551B2EC6ED00DF12F5 /* X4ImageViewer.m */,
+				3740A22D1B2EE0E2005F7CFB /* UIImage+SolidColor.h */,
+				3740A22E1B2EE0E2005F7CFB /* UIImage+SolidColor.m */,
+				3740A22F1B2EE0E2005F7CFB /* UIImageView+ClickToFullScreen.h */,
+				3740A2301B2EE0E2005F7CFB /* UIImageView+ClickToFullScreen.m */,
+				3740A2311B2EE0E2005F7CFB /* X4ImageViewer.h */,
+				3740A2321B2EE0E2005F7CFB /* X4ImageViewer.m */,
 			);
 			path = X4ImageViewer;
 			sourceTree = "<group>";
@@ -322,11 +322,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				378BED9E1B1441BD00010F90 /* ViewController.m in Sources */,
-				370E52561B2EC6ED00DF12F5 /* UIImage+SolidColor.m in Sources */,
+				3740A2331B2EE0E2005F7CFB /* UIImage+SolidColor.m in Sources */,
 				378BED9B1B1441BD00010F90 /* AppDelegate.m in Sources */,
 				378BED981B1441BD00010F90 /* main.m in Sources */,
-				370E52571B2EC6ED00DF12F5 /* UIImageView+ClickToFullScreen.m in Sources */,
-				370E52581B2EC6ED00DF12F5 /* X4ImageViewer.m in Sources */,
+				3740A2341B2EE0E2005F7CFB /* UIImageView+ClickToFullScreen.m in Sources */,
+				3740A2351B2EE0E2005F7CFB /* X4ImageViewer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
