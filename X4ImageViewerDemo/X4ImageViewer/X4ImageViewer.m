@@ -11,22 +11,21 @@
 #import "UIImage+SolidColor.h"
 
 static const CGFloat HeightCarousel = 24;
+static const CGFloat YPaddingCarousel = 18;
+static const CGFloat XPaddingCarousel = 16;
 
 @interface X4ImageViewer ()
 
-@property (nonatomic, strong) NSMutableArray *images;
+
+@property (nonatomic, strong) NSArray *imageSources;
 @property (nonatomic, strong) NSMutableArray *imageViews;
+@property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic, strong) NSMutableArray *innerScrollViews;
-@property (nonatomic, strong) UIScrollView *scrollView;
 
 @property (nonatomic, strong) SMPageControl *pageControl;
 @property (nonatomic, strong) UILabel *pageNumber;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
-@property (nonatomic, assign) CGFloat carouselXRatio;
-@property (nonatomic, assign) CGFloat carouselYRatio;
-
-@property (nonatomic, strong) UIImage *placeholderImage;
-@property (nonatomic, strong) NSArray *placeholderImages;
 
 @end
 
@@ -43,9 +42,9 @@ static const CGFloat HeightCarousel = 24;
     
         _currentPageIndex = 0;
         _carouselType = CarouselTypePageControl;
+        _carouselPosition = CarouselPositionBottomCenter;
         _bZoomEnable = YES;
         _bZoomRestoreAfterDimissed = YES;
-        _placeholderImage = [UIImage imageWithSolidColor:[UIColor blackColor]];
         _contentMode = ContentModeAspectNormal;
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
@@ -67,10 +66,7 @@ static const CGFloat HeightCarousel = 24;
 
         [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
         
-        CGRect rectPagination = CGRectMake(0, self.bounds.size.height - HeightCarousel, self.bounds.size.width, HeightCarousel);
-        
-        _carouselXRatio = (rectPagination.origin.x + rectPagination.size.width / 2) / self.bounds.size.width;
-        _carouselYRatio = (rectPagination.origin.y + rectPagination.size.height / 2) / self.bounds.size.height;
+        CGRect rectPagination = CGRectMake(0, self.bounds.size.height - HeightCarousel - YPaddingCarousel, self.bounds.size.width, HeightCarousel);
         
         _pageControl = [[SMPageControl alloc] initWithFrame:rectPagination];
         _pageControl.currentPage = _currentPageIndex;
@@ -84,6 +80,7 @@ static const CGFloat HeightCarousel = 24;
         _pageNumber.layer.borderWidth = 0;
         _pageNumber.layer.masksToBounds = YES;
         _pageNumber.layer.cornerRadius = 12;
+        _pageNumber.numberOfLines = 1;
         _pageNumber.font = [UIFont systemFontOfSize:15];
         _pageNumber.textColor = [UIColor whiteColor];
         _pageNumber.textAlignment = NSTextAlignmentCenter;
@@ -107,18 +104,62 @@ static const CGFloat HeightCarousel = 24;
     self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width * [self.images count], self.scrollView.bounds.size.height);
     self.scrollView.contentOffset = CGPointMake(self.currentPageIndex * self.scrollView.bounds.size.width, 0);
     
-    CGPoint carouselCenter = CGPointMake(self.bounds.size.width * self.carouselXRatio, self.bounds.size.height * self.carouselYRatio);
+    NSString *textPageNumber = [NSString stringWithFormat:@"%ld/%ld", [self.images count], [self.images count]];
+    CGRect rectPageNumber = [textPageNumber boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, HeightCarousel) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
+    rectPageNumber.size.width += 24;
     
-    CGRect boundsPageControl = self.pageControl.bounds;
-    boundsPageControl.size.width = self.bounds.size.width;
-    self.pageControl.bounds = boundsPageControl;
-    
-    CGPoint centerPageControl = self.pageControl.center;
-    centerPageControl.y = carouselCenter.y;
-    self.pageControl.center = centerPageControl;
-    
-    self.pageNumber.center = carouselCenter;
-    
+    switch (self.carouselPosition) {
+        case CarouselPositionBottomCenter:
+            self.pageControl.frame = CGRectMake(0,
+                                                self.bounds.size.height - HeightCarousel - YPaddingCarousel,
+                                                self.bounds.size.width,
+                                                HeightCarousel);
+            self.pageNumber.frame = CGRectMake((self.bounds.size.width - rectPageNumber.size.width) / 2,
+                                               self.bounds.size.height - rectPageNumber.size.height - YPaddingCarousel,
+                                               rectPageNumber.size.width ,
+                                               HeightCarousel);
+            break;
+        case CarouselPositionBottomLeft:
+            self.pageNumber.frame = CGRectMake(XPaddingCarousel,
+                                               self.bounds.size.height - rectPageNumber.size.height - YPaddingCarousel,
+                                               rectPageNumber.size.width,
+                                               HeightCarousel);
+            break;
+        case CarouselPositionBottomRight:
+            self.pageNumber.frame = CGRectMake(self.bounds.size.width - rectPageNumber.size.width - XPaddingCarousel,
+                                               self.bounds.size.height - rectPageNumber.size.height - YPaddingCarousel,
+                                               rectPageNumber.size.width,
+                                               HeightCarousel);
+            break;
+        case CarouselPositionTopCenter:
+            self.pageControl.frame = CGRectMake(0,
+                                                YPaddingCarousel,
+                                                self.bounds.size.width,
+                                                HeightCarousel);
+            self.pageNumber.frame = CGRectMake((self.bounds.size.width - rectPageNumber.size.width) / 2,
+                                               YPaddingCarousel,
+                                               rectPageNumber.size.width,
+                                               HeightCarousel);
+            break;
+        case CarouselPositionTopLeft:
+            self.pageNumber.frame = CGRectMake(XPaddingCarousel,
+                                               YPaddingCarousel,
+                                               rectPageNumber.size.width,
+                                               HeightCarousel);
+
+            break;
+            
+        case CarouselPositionTopRight:
+            self.pageNumber.frame = CGRectMake(self.bounds.size.width - rectPageNumber.size.width - XPaddingCarousel,
+                                               YPaddingCarousel,
+                                               rectPageNumber.size.width,
+                                               HeightCarousel);
+            break;
+            
+        default:
+            break;
+    }
+
     for(NSUInteger i=0; i<[self.images count]; i++){
         
         UIImage *image = (UIImage *)[self.images objectAtIndex:i];
@@ -170,97 +211,59 @@ static const CGFloat HeightCarousel = 24;
 
 }
 
+- (NSArray *)currentLoadedImages{
+    return self.images;
+}
+
+
+- (NSArray *)imageDataSources{
+    return self.imageSources;
+}
+
+- (UIImageView *)currentImageView{
+    if([self.imageViews count] > self.currentPageIndex){
+        return (UIImageView *)[self.imageViews objectAtIndex:self.currentPageIndex];
+    }else{
+        return nil;
+    }
+}
+
+- (UIScrollView *)currentScrollView{
+    if([self.innerScrollViews count] > self.currentPageIndex){
+        return (UIScrollView *)[self.innerScrollViews objectAtIndex:self.currentPageIndex];
+    }else{
+        return nil;
+    }
+}
+
+
+
 - (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage{
     
-    if(!images){
-        NSLog(@"[X4ImageViewer] Warning: images array is nil");
-        return;
-    }
-
-    [self removeAllImages];
-    
-    [self.images removeAllObjects];
-    [self.imageViews removeAllObjects];
-    [self.innerScrollViews removeAllObjects];
-    
-    self.pageControl.numberOfPages = [images count];
-    
-    if(placeholderImage){
-        self.placeholderImage = placeholderImage;
-    }
-    
-    for(NSUInteger i=0; i<[images count]; i++){
+    if(images == nil){
+        [self setImages:images withPlaceholder:nil];
+    }else{
+        NSMutableArray *placeholderImages = [NSMutableArray array];
+        UIImage *placeholder = placeholderImage ? placeholderImage : [UIImage imageWithSolidColor:[UIColor blackColor]];
         
-        UIScrollView *scrollView = [[UIScrollView alloc] init];
-        scrollView.delegate = self;
-        scrollView.pagingEnabled = NO;
-        scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
-        scrollView.tag = i;
-        
-        UIImageView *imageView = [[UIImageView alloc] init];
-        [scrollView addSubview:imageView];
-
-        NSObject *object = [images objectAtIndex:i];
-        
-        if([object isKindOfClass:[UIImage class]]){
-            
-            UIImage *image = (UIImage *)object;
-            [self.images insertObject:image atIndex:i];
-            
-        }else if([object isKindOfClass:[NSURL class]]){
-            
-            NSURL *url = (NSURL *)object;
-            [self.images insertObject:self.placeholderImage atIndex:i];
-            
-            [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                
-                if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingInProcess:withProcess:atIndex:)]){
-                    [self.delegate imageViewer:self loadingInProcess:imageView withProcess:(CGFloat)receivedSize/expectedSize atIndex:i];
-                }
-                
-            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-                
-                if(error){
-                    if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingFailed:withError:atIndex:)]){
-                        [self.delegate imageViewer:self loadingFailed:imageView withError:error atIndex:i];
-                    }
-                }else{
-                    if(image && finished){
-                        [self.images replaceObjectAtIndex:i withObject:image];
-                        imageView.image = nil;
-                        [scrollView removeFromSuperview];
-                        [self setNeedsLayout];
-                        
-                        if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:)]){
-                            [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i];
-                        }
-                    }
-                }
-                
-            }];
-        
-        }else {
-            NSLog(@"[X4ImageViewer] Warning: Unsupport type of images! Only `NSURL` or `UIImage` will be accepted.");
-            continue;
+        for(UIImage *image in images){
+            [placeholderImages addObject:placeholder];
         }
         
-        [self.imageViews addObject:imageView];
-        [self.innerScrollViews addObject:scrollView];
-        
+        [self setImages:images withPlaceholders:placeholderImages];
     }
-    
-    [self setNeedsLayout];
+   
 }
 
 - (void)setImages:(NSArray *)images withPlaceholders:(NSArray *)placeholderImages{
     
-    if(!images){
-        NSLog(@"[X4ImageViewer] Warning: Images array is nil");
+    if([images count] == 0){
+        NSLog(@"[X4ImageViewer] Warning: Images array is empty");
         return;
     }
     
-    if(!placeholderImages){
-        NSLog(@"[X4ImageViewer] Warning: Placeholder images array is nil. Try to use setImages:withPlaceholder instead if you really don't want a placeholder image.");
+    if([placeholderImages count] == 0){
+        NSLog(@"[X4ImageViewer] Warning: Placeholder images array is empty. Try to use setImages:withPlaceholder instead if you really don't want a placeholder image.");
         return;
     }
 
@@ -272,15 +275,13 @@ static const CGFloat HeightCarousel = 24;
     
     [self removeAllImages];
     
+    self.imageSources = images;
+    
     [self.images removeAllObjects];
     [self.imageViews removeAllObjects];
     [self.innerScrollViews removeAllObjects];
     
-    self.pageControl.numberOfPages = [images count];
-    
-    self.placeholderImages = placeholderImages;
-    
-    for(NSUInteger i=0; i<[images count]; i++){
+    for(NSUInteger i=0; i<[self.imageSources count]; i++){
         
         UIScrollView *scrollView = [[UIScrollView alloc] init];
         scrollView.delegate = self;
@@ -300,9 +301,10 @@ static const CGFloat HeightCarousel = 24;
             
         }else if([object isKindOfClass:[NSURL class]]){
             
-            NSURL *url = (NSURL *)object;
             UIImage *placeholderImage = (UIImage *)[placeholderImages objectAtIndex:i];
             [self.images insertObject:placeholderImage atIndex:i];
+            
+            NSURL *url = (NSURL *)object;
             
             [[SDWebImageManager sharedManager] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 
@@ -321,23 +323,29 @@ static const CGFloat HeightCarousel = 24;
                         [self.images replaceObjectAtIndex:i withObject:image];
                         imageView.image = nil;
                         [scrollView removeFromSuperview];
-                        [self setNeedsLayout];
                         
                         if(self.delegate && [self.delegate respondsToSelector:@selector(imageViewer:loadingSuccess:withImage:atIndex:)]){
                             [self.delegate imageViewer:self loadingSuccess:imageView withImage:image atIndex:i];
                         }
+                        
+                        [self setNeedsLayout];
                     }
                 }
                 
             }];
             
         }else {
-            NSAssert(NO, @"Unsupport type of images! Only `NSURL` or `UIImage` will be accepted.");
+            
+            NSLog(@"[X4ImageViewer] Warning: Unsupport type of images! Only `NSURL` or `UIImage` will be accepted.");
+            
+            UIImage *placeholderImage = (UIImage *)[placeholderImages objectAtIndex:i];
+            [self.images insertObject:placeholderImage atIndex:i];
         }
         
         [self.imageViews addObject:imageView];
         [self.innerScrollViews addObject:scrollView];
         
+        self.pageControl.numberOfPages = [self.images count];
     }
     
     [self setNeedsLayout];
@@ -372,13 +380,13 @@ static const CGFloat HeightCarousel = 24;
     }
 }
 
-- (void)setCarouselCenter:(CGPoint)carouselCenter{
+- (void)setCarouselPosition:(CarouselPosition)carouselPosition{
     
-    self.carouselXRatio = carouselCenter.x / self.bounds.size.width;
-    self.carouselYRatio = carouselCenter.y / self.bounds.size.height;
-
-    [self setNeedsLayout];
+    _carouselPosition = carouselPosition;
+    
+   [self setNeedsLayout];
 }
+
 
 - (void)setCurrentPageIndex:(NSInteger)currentPageIndex{
     _currentPageIndex = currentPageIndex;
@@ -462,13 +470,7 @@ static const CGFloat HeightCarousel = 24;
     self.pageControl.currentPage = self.currentPageIndex;
     
     NSString *text = [NSString stringWithFormat:@"%ld/%ld", self.currentPageIndex + 1, [self.images count]];
-    CGRect rect = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.pageNumber.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
-    
     self.pageNumber.text = text;
-    
-    CGRect boundsPageNumber = self.pageNumber.bounds;
-    boundsPageNumber.size.width = rect.size.width + 24;
-    self.pageNumber.bounds = boundsPageNumber;
     
     NSInteger previousImageIndex = self.currentPageIndex - 1;
     NSInteger nextImageIndex = self.currentPageIndex + 1;

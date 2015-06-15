@@ -82,9 +82,9 @@
     X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,60,320,400)];
     iv.delegate = self;
     iv.currentPageIndex = 3;
-    iv.carouselCenter = CGPointMake(160, 380);
-    iv.carouselType = CarouselTypePageControl;
-    iv.contentMode = ContentModeAspectFill;
+    iv.carouselType = CarouselTypePageNumber;
+    iv.contentMode = ContentModeAspectNormal;
+    iv.carouselPosition = CarouselPositionBottomLeft;
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
@@ -93,7 +93,7 @@
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];
 
-//    [self.view addSubview:iv];
+    [self.view addSubview:iv];
     
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
@@ -118,10 +118,10 @@
 //    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActionSheetStyleBlackTranslucent];
 
     
-    spinner.frame = CGRectMake(50,50, 200, 200);
-    
-    [self.view addSubview:spinner];
-    [spinner startAnimating];
+//    spinner.frame = CGRectMake(50,50, 200, 200);
+//    
+//    [self.view addSubview:spinner];
+//    [spinner startAnimating];
     
 }
 
@@ -149,7 +149,7 @@
 - (void)imageViewer:(X4ImageViewer *)imageViewer didSingleTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
     NSLog(@"Single tapped");
     
-//    imageViewer.frame = CGRectMake(20, 20, 200, 200);
+    imageViewer.frame = CGRectMake(20, 20, 200, 200);
 //    imageViewer.images = self.imageArray2;
 }
 

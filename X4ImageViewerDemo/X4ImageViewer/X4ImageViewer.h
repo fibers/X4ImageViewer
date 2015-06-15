@@ -15,12 +15,24 @@ typedef NS_ENUM(NSInteger, CarouselType){
     CarouselTypePageNone
 };
 
+// Only `CarouselPositionBottomCenter` and `CarouselPositionTopCenter` will be availablle when the self.carouselType is `CarouselTypePageControl`
+typedef NS_ENUM(NSInteger, CarouselPosition){
+    CarouselPositionBottomCenter = 0,
+    CarouselPositionBottomLeft,
+    CarouselPositionBottomRight,
+    CarouselPositionTopCenter,
+    CarouselPositionTopLeft,
+    CarouselPositionTopRight,
+};
+
+
 typedef NS_ENUM(NSInteger, ContentMode){
     ContentModeAspectNormal = 0, // Images larger than the view will be treated as ContentModeAspectFit, and images smaller than the view will be show as the normal size.
     ContentModeAspectFit,        // The same as UIViewContentModeScaleAspectFit, no matter the image is larger or smaller than the view
     ContentModeAspectFill,       // The same as UIViewContentModeScaleAspectFill, no matter the image is larger or smaller than the view
 
 };
+
 
 @class X4ImageViewer;
 @protocol X4ImageViewerDelegate <NSObject>
@@ -41,23 +53,25 @@ typedef NS_ENUM(NSInteger, ContentMode){
 
 @interface X4ImageViewer : UIView <UIScrollViewDelegate>
 
-
 @property (nonatomic, assign) BOOL bZoomEnable;
 @property (nonatomic, assign) BOOL bZoomRestoreAfterDimissed;
-@property (nonatomic, assign) NSInteger currentPageIndex;
-@property (nonatomic, assign) ContentMode contentMode;
+@property (nonatomic, assign) CarouselPosition carouselPosition;
 @property (nonatomic, assign) CarouselType carouselType;
+@property (nonatomic, assign) ContentMode contentMode;
+@property (nonatomic, assign) NSInteger currentPageIndex;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
+
+- (NSArray *)currentLoadedImages;
+- (NSArray *)imageDataSources;
+- (UIImageView *)currentImageView;
+- (UIScrollView *)currentScrollView;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithFrame:(CGRect)frame;
 
 - (void)setImages:(NSArray *)images withPlaceholder:(UIImage *)placeholderImage;
 - (void)setImages:(NSArray *)images withPlaceholders:(NSArray *)placeholderImages;
-- (void)setPageControlIndicatorImage:(UIImage *)indicatorImage;
 - (void)setPageControlCurrentIndicatorImage:(UIImage *)currentIndicatorImage;
-
-- (void)setCarouselCenter:(CGPoint)center;
-
+- (void)setPageControlIndicatorImage:(UIImage *)indicatorImage;
 
 @end
