@@ -246,7 +246,7 @@ static const CGFloat XPaddingCarousel = 16;
         NSMutableArray *placeholderImages = [NSMutableArray array];
         UIImage *placeholder = placeholderImage ? placeholderImage : [UIImage imageWithSolidColor:[UIColor blackColor]];
         
-        for(UIImage *image in images){
+        for(NSUInteger i=0; i<[images count]; i++){
             [placeholderImages addObject:placeholder];
         }
         
@@ -469,7 +469,7 @@ static const CGFloat XPaddingCarousel = 16;
     
     self.pageControl.currentPage = self.currentPageIndex;
     
-    NSString *text = [NSString stringWithFormat:@"%ld/%lu", self.currentPageIndex + 1, [self.images count]];
+    NSString *text = [NSString stringWithFormat:@"%ld/%lu", (long)self.currentPageIndex + 1, (unsigned long)[self.images count]];
     self.pageNumber.text = text;
     
     NSInteger previousImageIndex = self.currentPageIndex - 1;
