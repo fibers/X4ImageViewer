@@ -104,7 +104,7 @@ static const CGFloat XPaddingCarousel = 16;
     self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width * [self.images count], self.scrollView.bounds.size.height);
     self.scrollView.contentOffset = CGPointMake(self.currentPageIndex * self.scrollView.bounds.size.width, 0);
     
-    NSString *textPageNumber = [NSString stringWithFormat:@"%lu/%lu", [self.images count], [self.images count]];
+    NSString *textPageNumber = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)[self.images count], (unsigned long)[self.images count]];
     CGRect rectPageNumber = [textPageNumber boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, HeightCarousel) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil];
     rectPageNumber.size.width += 24;
     
@@ -469,7 +469,7 @@ static const CGFloat XPaddingCarousel = 16;
     
     self.pageControl.currentPage = self.currentPageIndex;
     
-    NSString *text = [NSString stringWithFormat:@"%ld/%lu", self.currentPageIndex + 1, [self.images count]];
+    NSString *text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)(self.currentPageIndex + 1), (unsigned long)[self.images count]];
     self.pageNumber.text = text;
     
     NSInteger previousImageIndex = self.currentPageIndex - 1;
