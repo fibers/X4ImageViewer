@@ -13,9 +13,6 @@
 
 @interface ViewController ()
 
-@property (nonatomic, strong) NSArray *imageArray;
-@property (nonatomic, strong) UIImage *placeholderImage;
-
 
 @end
 
@@ -25,7 +22,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.imageArray = @[
+    NSArray *imageArray = @[
                             [UIImage imageNamed:@"1.jpg"],
                             [UIImage imageNamed:@"2.jpg"],
                             [UIImage imageNamed:@"3.jpg"],
@@ -73,7 +70,7 @@
 
     
     
-    self.placeholderImage = [UIImage imageNamed:@"3.jpg"];
+    UIImage *placeholderImage = [UIImage imageNamed:@"3.jpg"];
     
     self.view.backgroundColor = [UIColor greenColor];
     
@@ -88,7 +85,7 @@
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
-    [iv setImages:self.imageArray withPlaceholder:nil];
+    [iv setImages:imageArray withPlaceholder:nil];
     
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];
@@ -107,23 +104,9 @@
     UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture1:)];
     [imageView addGestureRecognizer:tapGesture1];
     
-//    [self.view addSubview:imageView];
     
-
-//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActionSheetStyleDefault];
-//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActionSheetStyleBlackOpaque];
-//    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActionSheetStyleBlackTranslucent];
-
     
-//    spinner.frame = CGRectMake(50,50, 200, 200);
-//    
-//    [self.view addSubview:spinner];
-//    [spinner startAnimating];
-    
-}
+  }
 
 
 
@@ -150,7 +133,7 @@
     NSLog(@"Single tapped");
     
     imageViewer.frame = CGRectMake(20, 20, 200, 200);
-//    imageViewer.images = self.imageArray2;
+
 }
 
 
