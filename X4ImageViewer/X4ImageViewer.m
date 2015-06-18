@@ -32,68 +32,77 @@ static const CGFloat XPaddingCarousel = 16;
 
 @implementation X4ImageViewer
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if(self){
+        [self setup];
+    }
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame{
     
     self = [super initWithFrame:frame];
     if(self){
-        
-        self.backgroundColor = [UIColor blackColor];
-    
-        _currentPageIndex = 0;
-        _carouselType = CarouselTypePageControl;
-        _carouselPosition = CarouselPositionBottomCenter;
-        _bZoomEnable = YES;
-        _bZoomRestoreAfterDimissed = YES;
-        _contentMode = ContentModeAspectNormal;
-        
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        _scrollView.delegate = self;
-        _scrollView.pagingEnabled = YES;
-        _scrollView.scrollEnabled = YES;
-        _scrollView.bounces = NO;
-        _scrollView.showsHorizontalScrollIndicator = _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.tag = -1;
-        [self addSubview:_scrollView];
-        
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTappedScrollView:)];
-        tapGesture.numberOfTapsRequired = 1;
-        [_scrollView addGestureRecognizer:tapGesture];
-        
-        UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTappedScrollView:)];
-        doubleTapGesture.numberOfTapsRequired = 2;
-        [_scrollView addGestureRecognizer:doubleTapGesture];
-
-        [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
-        
-        CGRect rectPagination = CGRectMake(0, self.bounds.size.height - HeightCarousel - YPaddingCarousel, self.bounds.size.width, HeightCarousel);
-        
-        _pageControl = [[SMPageControl alloc] initWithFrame:rectPagination];
-        _pageControl.currentPage = _currentPageIndex;
-        _pageControl.hidesForSinglePage = YES;
-        _pageControl.defersCurrentPageDisplay = YES;
-        _pageControl.hidden = NO;
-        [self addSubview:_pageControl];
-        
-        _pageNumber = [[UILabel alloc] initWithFrame:rectPagination];
-        _pageNumber.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-        _pageNumber.layer.borderWidth = 0;
-        _pageNumber.layer.masksToBounds = YES;
-        _pageNumber.layer.cornerRadius = 12;
-        _pageNumber.numberOfLines = 1;
-        _pageNumber.font = [UIFont systemFontOfSize:15];
-        _pageNumber.textColor = [UIColor whiteColor];
-        _pageNumber.textAlignment = NSTextAlignmentCenter;
-        _pageNumber.hidden = YES;
-        [self addSubview:_pageNumber];
-        
-        _images = [NSMutableArray array];
-        _imageViews = [NSMutableArray array];
-        _innerScrollViews = [NSMutableArray array];
-        
-        return self;
+        [self setup];
     }
-    return nil;
+    return self;
+}
+
+- (void)setup{
+    
+    self.backgroundColor = [UIColor blackColor];
+    
+    _currentPageIndex = 0;
+    _carouselType = CarouselTypePageControl;
+    _carouselPosition = CarouselPositionBottomCenter;
+    _bZoomEnable = YES;
+    _bZoomRestoreAfterDimissed = YES;
+    _contentMode = ContentModeAspectNormal;
+    
+    _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    _scrollView.delegate = self;
+    _scrollView.pagingEnabled = YES;
+    _scrollView.scrollEnabled = YES;
+    _scrollView.bounces = NO;
+    _scrollView.showsHorizontalScrollIndicator = _scrollView.showsVerticalScrollIndicator = NO;
+    _scrollView.tag = -1;
+    [self addSubview:_scrollView];
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTappedScrollView:)];
+    tapGesture.numberOfTapsRequired = 1;
+    [_scrollView addGestureRecognizer:tapGesture];
+    
+    UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTappedScrollView:)];
+    doubleTapGesture.numberOfTapsRequired = 2;
+    [_scrollView addGestureRecognizer:doubleTapGesture];
+    
+    [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
+    
+    CGRect rectPagination = CGRectMake(0, self.bounds.size.height - HeightCarousel - YPaddingCarousel, self.bounds.size.width, HeightCarousel);
+    
+    _pageControl = [[SMPageControl alloc] initWithFrame:rectPagination];
+    _pageControl.currentPage = _currentPageIndex;
+    _pageControl.hidesForSinglePage = YES;
+    _pageControl.defersCurrentPageDisplay = YES;
+    _pageControl.hidden = NO;
+    [self addSubview:_pageControl];
+    
+    _pageNumber = [[UILabel alloc] initWithFrame:rectPagination];
+    _pageNumber.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    _pageNumber.layer.borderWidth = 0;
+    _pageNumber.layer.masksToBounds = YES;
+    _pageNumber.layer.cornerRadius = 12;
+    _pageNumber.numberOfLines = 1;
+    _pageNumber.font = [UIFont systemFontOfSize:15];
+    _pageNumber.textColor = [UIColor whiteColor];
+    _pageNumber.textAlignment = NSTextAlignmentCenter;
+    _pageNumber.hidden = YES;
+    [self addSubview:_pageNumber];
+    
+    _images = [NSMutableArray array];
+    _imageViews = [NSMutableArray array];
+    _innerScrollViews = [NSMutableArray array];
 }
 
 - (void)layoutSubviews{

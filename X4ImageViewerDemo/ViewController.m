@@ -9,9 +9,12 @@
 #import "ViewController.h"
 #import "AppDelegate.h"
 #import "UIImageView+ClickToFullScreen.h"
+#import "UIImage+SolidColor.h"
 
 
 @interface ViewController ()
+
+@property (weak, nonatomic) IBOutlet X4ImageViewer *imageViewer;
 
 
 @end
@@ -25,88 +28,66 @@
     NSArray *imageArray = @[
                             [UIImage imageNamed:@"1.jpg"],
                             [UIImage imageNamed:@"2.jpg"],
-                            [UIImage imageNamed:@"3.jpg"],
                             [UIImage imageNamed:@"4.jpg"],
                             [UIImage imageNamed:@"5.jpg"],
                             [UIImage imageNamed:@"6.jpg"]
                             ];
     
-    NSArray *imageArray1 = @[
-                            [UIImage imageNamed:@"4.jpg"],
-                            [UIImage imageNamed:@"5.jpg"]
+    NSArray *urlArray = @[
+                           
+                            [NSURL URLWithString:@"http://res.cloudinary.com/ddbtyv5bo/image/upload/v1400134498/msdhd8906lz5uxbx3oy7.jpg"],
+                            [NSURL URLWithString:@"http://res.cloudinary.com/ddbtyv5bo/image/upload/v1400134672/uputh2onyan9ntui6cwj.jpg"],
+                            [NSURL URLWithString:@"http://res.cloudinary.com/ddbtyv5bo/image/upload/v1400074061/lm7xcar9hk6wd9e6ghuv.jpg"],
+                            [NSURL URLWithString:@"http://res.cloudinary.com/ddbtyv5bo/image/upload/v1400073989/tfktxvg5crgml9zz3as0.jpg"],
+                            [NSURL URLWithString:@"http://res.cloudinary.com/ddbtyv5bo/image/upload/v1400072964/kyr2wee2rvq33low64fl.jpg"]
                             ];
     
-    NSArray *imageArray2 = @[
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
-                         [UIImage imageNamed:@"1.jpg"]
-                         ];
-    
-    NSArray *imageArray3 = @[
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
-                         [UIImage imageNamed:@"1.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
-                         [UIImage imageNamed:@"6.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
-                         [UIImage imageNamed:@"5.jpg"],
-                         [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
-                             [UIImage imageNamed:@"1.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
-                             [UIImage imageNamed:@"6.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
-                             [UIImage imageNamed:@"5.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433411719/ba5jij1imi8e1tbrqbww.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909562/tl8tadtulxjm3ps4pnvx.jpg"],
-                             [UIImage imageNamed:@"1.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/jfqsxgvtpnjgycu6akl1.jpg"],
-                             [UIImage imageNamed:@"6.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909561/lkol5wdzfu64l8bppjpi.jpg"],
-                             [UIImage imageNamed:@"5.jpg"],
-                             [NSURL URLWithString:@"http://res.cloudinary.com/fivemiles/image/upload/v1433909556/yqryfx1y1bnowzz6tgch.jpg"]
-                         ];
 
     
     
     UIImage *placeholderImage = [UIImage imageNamed:@"3.jpg"];
     
-    self.view.backgroundColor = [UIColor greenColor];
+    self.view.backgroundColor = [UIColor grayColor];
     
+    self.imageViewer.delegate = self;
+    self.imageViewer.currentPageIndex = 3;
+    self.imageViewer.carouselType = CarouselTypePageNumber;
+    self.imageViewer.contentMode = ContentModeAspectNormal;
+    self.imageViewer.carouselPosition = CarouselPositionBottomLeft;
+    self.imageViewer.bZoomEnable = YES;
+    self.imageViewer.bZoomRestoreAfterDimissed = YES;
     
+    [self.imageViewer setImages:imageArray withPlaceholder:placeholderImage];
+    [self.imageViewer setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
+    [self.imageViewer setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];
     
-    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(0,60,320,400)];
+    X4ImageViewer *iv = [[X4ImageViewer alloc] initWithFrame:CGRectMake(160, 20 ,160,160)];
     iv.delegate = self;
     iv.currentPageIndex = 3;
-    iv.carouselType = CarouselTypePageNumber;
-    iv.contentMode = ContentModeAspectNormal;
-    iv.carouselPosition = CarouselPositionBottomLeft;
+    iv.carouselType = CarouselTypePageControl;
+    iv.contentMode = ContentModeAspectFill;
+    iv.carouselPosition = CarouselPositionTopCenter;
     iv.bZoomEnable = YES;
     iv.bZoomRestoreAfterDimissed = YES;
     
-    [iv setImages:imageArray withPlaceholder:nil];
-    
+    [iv setImages:urlArray withPlaceholder:placeholderImage];
     [iv setPageControlCurrentIndicatorImage:[UIImage imageNamed:@"active"]];
     [iv setPageControlIndicatorImage:[UIImage imageNamed:@"inactive"]];
 
     [self.view addSubview:iv];
     
     
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 100,100)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 200, 100,100)];
     
     imageView.image = [UIImage imageNamed:@"6.jpg"];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.userInteractionEnabled = YES;
     
     [imageView enableClickToFullScreen];
+    [self.view addSubview:imageView];
+
     
-    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture1:)];
-    [imageView addGestureRecognizer:tapGesture1];
-    
-    
-    
-  }
+}
 
 
 
@@ -131,8 +112,6 @@
 
 - (void)imageViewer:(X4ImageViewer *)imageViewer didSingleTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
     NSLog(@"Single tapped");
-    
-    imageViewer.frame = CGRectMake(20, 20, 200, 200);
 
 }
 

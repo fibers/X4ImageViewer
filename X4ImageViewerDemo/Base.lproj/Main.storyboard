@@ -15,8 +15,25 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IJm-Jf-eYP" customClass="X4ImageViewer">
+                                <rect key="frame" x="0.0" y="20" width="160" height="160"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="14x-B2-WRh"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="IJm-Jf-eYP" secondAttribute="trailing" constant="160" id="Snh-ng-4ux"/>
+                            <constraint firstItem="IJm-Jf-eYP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Wk7-zL-fhC"/>
+                            <constraint firstItem="IJm-Jf-eYP" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="mZN-sx-dvz"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imageViewer" destination="IJm-Jf-eYP" id="VD2-nb-zcI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>

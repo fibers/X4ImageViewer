@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, CarouselType){
     CarouselTypePageNone
 };
 
-// Only `CarouselPositionBottomCenter` and `CarouselPositionTopCenter` will be availablle when the self.carouselType is `CarouselTypePageControl`
+// Only `CarouselPositionBottomCenter` and `CarouselPositionTopCenter` will be availablle when the carouselType is `CarouselTypePageControl`
 typedef NS_ENUM(NSInteger, CarouselPosition){
     CarouselPositionBottomCenter = 0,
     CarouselPositionBottomLeft,
@@ -27,9 +27,19 @@ typedef NS_ENUM(NSInteger, CarouselPosition){
 
 
 typedef NS_ENUM(NSInteger, ContentMode){
-    ContentModeAspectNormal = 0, // Images larger than the view will be treated as ContentModeAspectFit, and images smaller than the view will be show as the normal size.
-    ContentModeAspectFit,        // The same as UIViewContentModeScaleAspectFit, no matter the image is larger or smaller than the view
-    ContentModeAspectFill,       // The same as UIViewContentModeScaleAspectFill, no matter the image is larger or smaller than the view
+    /* 
+     Images larger than the container will be treated as ContentModeAspectFit,
+    and images smaller than the container will be showed in its original size. 
+     */
+    ContentModeAspectNormal = 0,
+    /* 
+     The same as UIViewContentModeScaleAspectFit, no matter the image is larger or smaller than the view
+    */
+    ContentModeAspectFit,
+    /*
+     The same as UIViewContentModeScaleAspectFill, no matter the image is larger or smaller than the view
+     */
+    ContentModeAspectFill
 
 };
 
