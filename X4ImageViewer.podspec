@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "X4ImageViewer"
-  s.version      = "1.0.1"
+  s.version      = "v1.0.1"
   s.summary      = "A ios easy-to-use image viewer."
   s.description  = <<-DESC
 		   * X4ImageViewer is a easy-to-use image viewer written in Object-C. It also provides some common tools when used with image.
