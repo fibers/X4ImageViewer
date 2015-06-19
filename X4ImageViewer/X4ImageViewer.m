@@ -175,9 +175,15 @@ static const CGFloat XPaddingCarousel = 16;
         UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:i];
         UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:i];
 
+        for(UIView *subview in scrollView.subviews){
+            [subview removeFromSuperview];
+        }
+        
         imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
         imageView.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
         imageView.transform = CGAffineTransformIdentity;
+        
+        [scrollView addSubview:imageView];
         
         scrollView.frame = CGRectMake(i * self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
         scrollView.contentSize = imageView.bounds.size;
@@ -214,6 +220,17 @@ static const CGFloat XPaddingCarousel = 16;
         
         scrollView.zoomScale = scrollView.minimumZoomScale;
         [self move:imageView toCenterOf:scrollView];
+        
+        NSArray *supplementaryViews;
+        if(self.dataSource && [self.dataSource respondsToSelector:@selector(imageViewer:supplementaryViewsFor:atIndex:)]){
+            supplementaryViews = [self.dataSource imageViewer:self supplementaryViewsFor:imageView atIndex:i];
+        }
+        
+        if([supplementaryViews count] > 0){
+            for(UIView *view in supplementaryViews ){
+                [imageView addSubview:view];
+            }
+        }
     }
     
     [self loadImages];
@@ -280,11 +297,11 @@ static const CGFloat XPaddingCarousel = 16;
         NSLog(@"[X4ImageViewer] Warning: The number of the placeholder images is not match the number of images.");
         return;
     }
-
     
     [self removeAllImages];
     
     self.imageSources = images;
+    self.pageControl.numberOfPages = [self.imageSources count];
     
     [self.images removeAllObjects];
     [self.imageViews removeAllObjects];
@@ -299,7 +316,6 @@ static const CGFloat XPaddingCarousel = 16;
         scrollView.tag = i;
         
         UIImageView *imageView = [[UIImageView alloc] init];
-        [scrollView addSubview:imageView];
         
         NSObject *object = [images objectAtIndex:i];
         
@@ -353,8 +369,7 @@ static const CGFloat XPaddingCarousel = 16;
         
         [self.imageViews addObject:imageView];
         [self.innerScrollViews addObject:scrollView];
-        
-        self.pageControl.numberOfPages = [self.images count];
+
     }
     
     [self setNeedsLayout];
@@ -515,8 +530,10 @@ static const CGFloat XPaddingCarousel = 16;
                 [self.delegate imageViewer:self didSlideFrom:imageView fromIndex:self.currentPageIndex to:newImageView toIndex:newImageIndex];
             }
         }
+        
         _currentPageIndex = newImageIndex;
         [self loadImages];
+        
     }
 }
 

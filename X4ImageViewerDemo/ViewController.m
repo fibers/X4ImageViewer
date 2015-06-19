@@ -77,7 +77,7 @@
     [self.view addSubview:iv];
     
     
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 200, 100,100)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 200, 160,160)];
     
     imageView.image = [UIImage imageNamed:@"6.jpg"];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -85,8 +85,19 @@
     
     [imageView enableClickToFullScreen];
     [self.view addSubview:imageView];
-
     
+    X4ImageViewer *supplementaryViewer = [[X4ImageViewer alloc] initWithFrame:CGRectMake(160, 200 ,160,160)];
+    supplementaryViewer.delegate = self;
+    supplementaryViewer.dataSource = self;
+    supplementaryViewer.currentPageIndex = 1;
+    supplementaryViewer.carouselType = CarouselTypePageNumber;
+    supplementaryViewer.contentMode = ContentModeAspectNormal;
+    supplementaryViewer.carouselPosition = CarouselPositionBottomCenter;
+    supplementaryViewer.bZoomEnable = YES;
+    supplementaryViewer.bZoomRestoreAfterDimissed = YES;
+    [supplementaryViewer setImages:imageArray withPlaceholder:placeholderImage];
+    
+    [self.view addSubview:supplementaryViewer];
 }
 
 
@@ -100,6 +111,44 @@
 //- (void)imageViewer:(X4ImageViewer *)imageViewer didDoubleTap:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
 //    NSLog(@"Double tapped");
 //}
+
+- (NSArray *)imageViewer:(X4ImageViewer *)imageViewer supplementaryViewsFor:(UIImageView *)imageVew atIndex:(NSInteger)index{
+    NSMutableArray *supplementaryViews = [NSMutableArray array];
+    if(index == 0){
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, imageVew.bounds.size.width, 20)];
+        label.text = @"Hello World";
+        label.font = [UIFont boldSystemFontOfSize:20];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor redColor];
+        
+        [supplementaryViews addObject:label];
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 40, imageVew.bounds.size.width, 40)];
+        [button setTitle:@"Hey man" forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
+        button.backgroundColor = [UIColor purpleColor];
+    
+        [supplementaryViews addObject:button];
+        
+    }else if(index == 1){
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, imageVew.bounds.size.width, 20)];
+        label.text = @"Hello man";
+        label.font = [UIFont boldSystemFontOfSize:24];
+        label.textColor = [UIColor redColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        
+        [supplementaryViews addObject:label];
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 40, imageVew.bounds.size.width, 40)];
+        [button setTitle:@"Hey world" forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        button.backgroundColor = [UIColor whiteColor];
+        
+        [supplementaryViews addObject:button];
+    }
+    
+    return supplementaryViews;
+}
 
 - (void)imageViewer:(X4ImageViewer *)imageViewer didEndZoomingWith:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView{
     

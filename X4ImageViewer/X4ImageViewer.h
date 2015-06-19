@@ -45,6 +45,14 @@ typedef NS_ENUM(NSInteger, ContentMode){
 
 
 @class X4ImageViewer;
+@protocol X4ImageViewerDataSource <NSObject>
+
+@optional
+- (NSArray *)imageViewer:(X4ImageViewer *)imageViewer supplementaryViewsFor:(UIImageView *)imageVew atIndex:(NSInteger)index;
+
+
+@end
+
 @protocol X4ImageViewerDelegate <NSObject>
 
 @optional
@@ -52,7 +60,7 @@ typedef NS_ENUM(NSInteger, ContentMode){
 - (void)imageViewer:(X4ImageViewer *)imageViewer didDoubleTap:(UIImageView *)imageView atIndex:(NSInteger)index
  inScrollView:(UIScrollView *)scrollView;
 - (void)imageViewer:(X4ImageViewer *)imageViewer didSlideFrom:(UIImageView *)fromImageView fromIndex:(NSInteger)fromIndex to:(UIImageView *)toImageView toIndex:(NSInteger)toIndex;
-- (void)imageViewer:(X4ImageViewer *)imageViewer didEndZoomingWith:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;;
+- (void)imageViewer:(X4ImageViewer *)imageViewer didEndZoomingWith:(UIImageView *)imageView atIndex:(NSInteger)index inScrollView:(UIScrollView *)scrollView;
 
 - (void)imageViewer:(X4ImageViewer *)imageViewer loadingInProcess:(UIImageView *)imageView withProcess:(CGFloat)process atIndex:(NSInteger)index;
 - (void)imageViewer:(X4ImageViewer *)imageViewer loadingSuccess:(UIImageView *)imageView withImage:(UIImage *)image atIndex:(NSInteger)index;
@@ -70,6 +78,7 @@ typedef NS_ENUM(NSInteger, ContentMode){
 @property (nonatomic, assign) ContentMode contentMode;
 @property (nonatomic, assign) NSInteger currentPageIndex;
 @property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
+@property (nonatomic, assign) id<X4ImageViewerDataSource> dataSource;
 
 - (NSArray *)currentLoadedImages;
 - (NSArray *)imageDataSources;
