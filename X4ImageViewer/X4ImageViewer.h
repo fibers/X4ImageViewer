@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, ContentMode){
 @protocol X4ImageViewerDataSource <NSObject>
 
 @optional
-- (NSArray *)imageViewer:(X4ImageViewer *)imageViewer supplementaryViewsFor:(UIImageView *)imageVew atIndex:(NSInteger)index;
+- (NSArray *)imageViewer:(X4ImageViewer *)imageViewer supplementaryViewsFor:(UIImageView *)imageView atIndex:(NSInteger)index;
 
 
 @end
