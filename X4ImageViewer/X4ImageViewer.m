@@ -174,10 +174,6 @@ static const CGFloat XPaddingCarousel = 16;
         UIImage *image = (UIImage *)[self.images objectAtIndex:i];
         UIImageView *imageView = (UIImageView *)[self.imageViews objectAtIndex:i];
         UIScrollView *scrollView = (UIScrollView *)[self.innerScrollViews objectAtIndex:i];
-
-        for(UIView *subview in scrollView.subviews){
-            [subview removeFromSuperview];
-        }
         
         imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
         imageView.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
@@ -219,7 +215,12 @@ static const CGFloat XPaddingCarousel = 16;
         }
         
         scrollView.zoomScale = scrollView.minimumZoomScale;
+        
         [self move:imageView toCenterOf:scrollView];
+        
+        for(UIView *subview in imageView.subviews){
+            [subview removeFromSuperview];
+        }
         
         NSArray *supplementaryViews;
         if(self.dataSource && [self.dataSource respondsToSelector:@selector(imageViewer:supplementaryViewsFor:atIndex:)]){
