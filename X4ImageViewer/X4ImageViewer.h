@@ -77,8 +77,8 @@ typedef NS_ENUM(NSInteger, ContentMode){
 @property (nonatomic, assign) CarouselType carouselType;
 @property (nonatomic, assign) ContentMode contentMode;
 @property (nonatomic, assign) NSInteger currentPageIndex;
-@property (nonatomic, assign) id<X4ImageViewerDelegate> delegate;
-@property (nonatomic, assign) id<X4ImageViewerDataSource> dataSource;
+@property (nonatomic, weak) id<X4ImageViewerDelegate> delegate;
+@property (nonatomic, weak) id<X4ImageViewerDataSource> dataSource;
 
 - (NSArray *)currentLoadedImages;
 - (NSArray *)imageDataSources;
